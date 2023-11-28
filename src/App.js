@@ -43,6 +43,13 @@ function App() {
                                                 document.getElementById("rightColumns").value)}>Create Venue</button><p></p>
         <p id="result" readOnly/>
 
+        venue name: <input id = "venueNameCreateShow"/><p></p>
+        venue password: <input id = "venuePasswordCreateShow"/><p></p>
+        show title: <input id = "showTitle"/><p></p>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTime"/><p></p>
+        end date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showEndTime"/><p></p>
+        uses blocks? 'Boolean 0 or 1': <input id = "venuePasswordDelete"/><p></p>
+
         <p></p>
         <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button><p></p>
 
