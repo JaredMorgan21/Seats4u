@@ -23,6 +23,31 @@ export function createVenue(name, password, leftRows, leftCols, centerRows, cent
     post('/venue/create', data, handler)
 }
 
+export function createVenue(venueName, password, title, startTime, endTime, usesBlocks){
+    let data = {  "venueName": venueName,
+                  "password" : password,
+                  "title" : title,
+                  "startTime" : startTime,
+                  "endTime" : endTime,
+                  "usesBlocks" : usesBlocks}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200){
+            document.getElementById("result").innerHTML = "Show created with name \'" + json.success + "\'"
+        }
+        else{
+            document.getElementById("result").innerHTML = "Error. No work"
+        }
+    }
+
+    post('/show/create', data, handler)
+}
+
+
+
+
+
 export function deleteVenue(name, venuePass){
     let data = {  "name": name,
                   "password" : venuePass}
