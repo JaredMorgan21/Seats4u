@@ -2,6 +2,7 @@
 //import './App.css';
 import {createVenue} from './Controller.js'
 import {deleteVenue} from './Controller.js'
+import {listVenues} from './Controller.js'
 
 function App() {
   return (
@@ -49,6 +50,11 @@ function App() {
         venue password: <input id = "venuePasswordDelete"/><p></p>
         <button onClick = {(e) => deleteVenue(document.getElementById("venueNameDelete").value, document.getElementById("venuePasswordDelete").value)}>Delete venue</button>
         <p id="venueDeleteResult"/>
+
+        admin password: <input id = "adminPass"/><p></p>
+        <button onClick = {(e) => listVenues(document.getElementById("adminPass").value)}>List Venues</button>
+        <p id="venuesList"/>
+
     </div>
   );
 }

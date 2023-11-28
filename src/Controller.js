@@ -23,10 +23,9 @@ export function createVenue(name, password, leftRows, leftCols, centerRows, cent
     post('/venue/create', data, handler)
 }
 
-export function deleteVenue(name, adminPass){
+export function deleteVenue(name, venuePass){
     let data = {  "name": name,
-                  "password" : adminPass}
-    console.log(adminPass)
+                  "password" : venuePass}
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200){
@@ -38,4 +37,24 @@ export function deleteVenue(name, adminPass){
     }
 
     post('/venue/delete', data, handler)
+}
+
+export function listVenues(adminPass){
+    let data = {"password" : adminPass}
+    const handler = (json) => {
+        console.log(json.success)
+        if(json.statusCode == 200){
+            let venues = "Name, leftCols, leftRows, centerCols, centerRows, rightCols, rightRows <br>"
+            for(let v of json.success){
+                venues += v.venueName + ' ' + v.leftColumns + ' ' + v.leftRows + ' ' + v.centerColumns + ' ' + v.centerRows + ' ' + v.rightColumns + ' ' + v.rightRows + '<br>'
+            }
+            
+            document.getElementById("venuesList").innerHTML = venues
+        }
+        else{
+            document.getElementById("venuesList").innerHTML = "Invalid password"
+        }
+    }
+
+    post('/venue/list', data, handler)
 }
