@@ -7,8 +7,8 @@ import {listVenues} from './Controller.js'
 function App() {
   return (
     <div className = "App">
-        name: <input id = "venueName"/><p></p>
-        password: <input id = "venuePassword"/><p></p>
+        name: <input id = "venueName"/><br/>
+        password: <input id = "venuePassword"/><br/>
 
         <table>
             <tr>
@@ -31,8 +31,7 @@ function App() {
                 <td><input id="rightRows"/></td>
                 <td><input id="rightColumns"/></td>
             </tr>
-        </table>
-        <p></p>
+        </table><br/>
         <button onClick = {(e) => createVenue(document.getElementById("venueName").value,
                                                 document.getElementById("venuePassword").value,
                                                 document.getElementById("leftRows").value,
@@ -40,25 +39,25 @@ function App() {
                                                 document.getElementById("centerRows").value,
                                                 document.getElementById("centerColumns").value,
                                                 document.getElementById("rightRows").value,
-                                                document.getElementById("rightColumns").value)}>Create Venue</button><p></p>
+                                                document.getElementById("rightColumns").value)}>Create Venue</button><br/>
         <p id="result" readOnly/>
 
-        venue name: <input id = "venueNameCreateShow"/><p></p>
-        venue password: <input id = "venuePasswordCreateShow"/><p></p>
-        show title: <input id = "showTitle"/><p></p>
-        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTime"/><p></p>
-        end date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showEndTime"/><p></p>
-        uses blocks? 'Boolean 0 or 1': <input id = "venuePasswordDelete"/><p></p>
+        venue name: <input id = "venueNameCreateShow"/><br/>
+        venue password: <input id = "venuePasswordCreateShow"/><br/>
+        show title: <input id = "showTitle"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTime"/><br/>
+        end date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showEndTime"/><br/>
+        uses blocks? 'Boolean 0 or 1': <input id = "usesBlocks"/><br/>
 
         <p></p>
-        <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button><p></p>
+        <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button><br/>
 
-        venue name: <input id = "venueNameDelete"/><p></p>
-        venue password: <input id = "venuePasswordDelete"/><p></p>
+        venue name: <input id = "venueNameDelete"/><br/>
+        venue password: <input id = "venuePasswordDelete"/><br/>
         <button onClick = {(e) => deleteVenue(document.getElementById("venueNameDelete").value, document.getElementById("venuePasswordDelete").value)}>Delete venue</button>
         <p id="venueDeleteResult"/>
 
-        admin password: <input id = "adminPass"/><p></p>
+        admin password: <input id = "adminPass"/><br/>
         <button onClick = {(e) => listVenues(document.getElementById("adminPass").value)}>List Venues</button>
         <p id="venuesList"/>
 
