@@ -46,8 +46,8 @@ function App() {
         <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button><p></p>
 
         venue name: <input id = "venueNameDelete"/><p></p>
-        admin password: <input id = "adminPassword"/><p></p>
-        <button onClick = {(e) => deleteVenue(document.getElementById("venueNameDelete").value, document.getElementById("adminPassword").value)}>Delete venue</button>
+        venue password: <input id = "venuePasswordDelete"/><p></p>
+        <button onClick = {(e) => deleteVenue(document.getElementById("venueNameDelete").value, document.getElementById("venuePasswordDelete").value)}>Delete venue</button>
         <p id="venueDeleteResult"/>
     </div>
   );
