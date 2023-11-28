@@ -1,6 +1,8 @@
 //import logo from './logo.svg';
 //import './App.css';
 import {createVenue} from './Controller.js'
+import {deleteVenue} from './Controller.js'
+
 function App() {
   return (
     <div className = "App">
@@ -30,11 +32,23 @@ function App() {
             </tr>
         </table>
         <p></p>
-        <button onClick = {(e) => createVenue()}>Create Venue</button><p></p>
-        result: <input id="result" readOnly/>
+        <button onClick = {(e) => createVenue(document.getElementById("venueName").value,
+                                                document.getElementById("venuePassword").value,
+                                                document.getElementById("leftRows").value,
+                                                document.getElementById("leftColumns").value,
+                                                document.getElementById("centerRows").value,
+                                                document.getElementById("centerColumns").value,
+                                                document.getElementById("rightRows").value,
+                                                document.getElementById("rightColumns").value)}>Create Venue</button><p></p>
+        <p id="result" readOnly/>
 
         <p></p>
-        <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button>
+        <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button><p></p>
+
+        venue name: <input id = "venueNameDelete"/><p></p>
+        admin password: <input id = "adminPassword"/><p></p>
+        <button onClick = {(e) => deleteVenue(document.getElementById("venueNameDelete").value, document.getElementById("adminPassword").value)}>Delete venue</button>
+        <p id="venueDeleteResult"/>
     </div>
   );
 }
