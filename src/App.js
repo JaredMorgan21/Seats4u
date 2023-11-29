@@ -50,7 +50,13 @@ function App() {
         uses blocks? 'Boolean 0 or 1': <input id = "usesBlocks"/><br/>
 
         <p></p>
-        <button onClick = {(e) => document.location.href = 'shows.js'}>Create Show</button><br/>
+        <button onClick = {(e) => createShow(document.getElementById("venueNameCreateShow").value,
+                                            document.getElementById("venuePasswordCreateShow").value,
+                                            document.getElementById("showTitle").value,
+                                            document.getElementById("showStartTime").value,
+                                            document.getElementById("showEndTime").value,
+                                            document.getElementById("usesBlocks").value
+                                            )}>Create Show</button><p></p> //change to function??
 
         venue name: <input id = "venueNameDelete"/><br/>
         venue password: <input id = "venuePasswordDelete"/><br/>
