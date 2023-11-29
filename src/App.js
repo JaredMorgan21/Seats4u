@@ -3,6 +3,7 @@
 import {createVenue} from './Controller.js'
 import {deleteVenue} from './Controller.js'
 import {listVenues} from './Controller.js'
+import {createShow} from './Controller.js'
 
 function App() {
   return (
