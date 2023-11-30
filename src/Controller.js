@@ -1,5 +1,6 @@
 import {post} from "./API"
 
+//venue manager
 export function createVenue(name, password, leftRows, leftCols, centerRows, centerCols, rightRows, rightCols){
     let data = {  "name": name,
                   "password" : password,
@@ -44,8 +45,17 @@ export function createShow(venueName, password, title, startTime, endTime, usesB
     post('/show/create', data, handler)
 }
 
+export function createBlock() {
 
+}
 
+export function activateShow() {
+
+}
+
+export function deleteShow() {
+
+}
 
 
 export function deleteVenue(name, venuePass){
@@ -64,6 +74,8 @@ export function deleteVenue(name, venuePass){
     post('/venue/delete', data, handler)
 }
 
+
+//admin
 export function listVenues(adminPass){
     let data = {"password" : adminPass}
     const handler = (json) => {
@@ -82,4 +94,27 @@ export function listVenues(adminPass){
     }
 
     post('/venue/list', data, handler)
+}
+
+
+//consumer
+export function searchShows(title) {
+    let data = {"title" : title}
+    const handler = (json) => {
+        console.log(json.success)
+        if(json.statusCode == 200) {
+            let shows = "title, venue, date <br>"
+            for(let v of json.success) {
+                shows += v.title + ' ' + v.venueName + ' ' + v.startTime + '<br>'
+            }
+
+            document.getElementById("searchShowsList").innerHTML = shows
+
+        } else {
+            document.getElementById("searchShowsList").innerHTML = "some sort of error maybe change later"
+        }
+    }
+
+    post('/show/search', data, handler) //this is where it talks to API?
+
 }

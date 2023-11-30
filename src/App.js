@@ -4,6 +4,7 @@ import {createVenue} from './Controller.js'
 import {deleteVenue} from './Controller.js'
 import {listVenues} from './Controller.js'
 import {createShow} from './Controller.js'
+import {searchShows} from './Controller.js'
 
 function App() {
   return (
@@ -67,6 +68,11 @@ function App() {
         admin password: <input id = "adminPass"/><br/>
         <button onClick = {(e) => listVenues(document.getElementById("adminPass").value)}>List Venues</button>
         <p id="venuesList"/>
+
+        {/* search shows for the consumer */}
+        search: <input id = "searchShowInput"/><br/>
+        <button onClick = {(e) => searchShows(document.getElementById("searchShowInput").value)}>Search!</button>
+        <p id="searchShowsList"/>
 
     </div>
   );
