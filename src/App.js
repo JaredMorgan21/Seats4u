@@ -5,6 +5,7 @@ import {deleteVenue} from './Controller.js'
 import {listVenues} from './Controller.js'
 import {createShow} from './Controller.js'
 import {searchShows} from './Controller.js'
+import {deleteShow} from './Controller.js'
 
 function App() {
   return (
@@ -73,6 +74,13 @@ function App() {
         search: <input id = "searchShowInput"/><br/>
         <button onClick = {(e) => searchShows(document.getElementById("searchShowInput").value)}>Search!</button>
         <p id="searchShowsList"/>
+
+        {/* delete show for venue manager */}
+        venue name: <input id = "venueNameDeleteShow"/><br/>
+        venue password: <input id = "venuePasswordDeleteShow"/><br/>
+        show title: <input id = "showTitleDeleteShow"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTime"/><br/>
+        <button onClick = {(e) => deleteShow(document.getElementById("showDeleteResultVM").value)}>Delete Show</button>
 
     </div>
   );

@@ -53,7 +53,22 @@ export function activateShow() {
 
 }
 
-export function deleteShow() {
+export function deleteShow(venueName, password, title, startTime) {
+    let data = {  "venueName": venueName,
+                  "password" : password,
+                  "title" : title,
+                  "startTime" : startTime}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
+        } else {
+            document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists"
+        }
+    }
+
+    post('/show/delete', data, handler)
 
 }
 
@@ -108,7 +123,12 @@ export function searchShows(title) {
                 shows += v.title + ' ' + v.venueName + ' ' + v.startTime + '<br>'
             }
 
-            document.getElementById("searchShowsList").innerHTML = shows
+            if(json.success.length == 0) {
+                document.getElementById("searchShowsList").innerHTML = "No shows match your search"
+            } else {
+                document.getElementById("searchShowsList").innerHTML = shows
+            }
+
 
         } else {
             document.getElementById("searchShowsList").innerHTML = "some sort of error maybe change later"
