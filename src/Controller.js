@@ -35,10 +35,10 @@ export function createShow(venueName, password, title, startTime, endTime, usesB
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200){
-            document.getElementById("result").innerHTML = "Show created with name \'" + json.success + "\'"
+            document.getElementById("resultShow").innerHTML = "Show created with name \'" + json.success + "\'"
         }
         else{
-            document.getElementById("result").innerHTML = "Error. No work"
+            document.getElementById("resultShow").innerHTML = "Error. No work"
         }
     }
 

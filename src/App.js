@@ -51,14 +51,14 @@ function App() {
         end date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showEndTime"/><br/>
         uses blocks? 'Boolean 0 or 1': <input id = "usesBlocks"/><br/>
 
-        <p></p>
         <button onClick = {(e) => createShow(document.getElementById("venueNameCreateShow").value,
                                             document.getElementById("venuePasswordCreateShow").value,
                                             document.getElementById("showTitle").value,
                                             document.getElementById("showStartTime").value,
                                             document.getElementById("showEndTime").value,
                                             document.getElementById("usesBlocks").value
-                                            )}>Create Show</button><p></p> //change to function??
+                                            )}>Create Show</button><br/>
+        <p id="resultShow" readOnly/>
 
         venue name: <input id = "venueNameDelete"/><br/>
         venue password: <input id = "venuePasswordDelete"/><br/>
