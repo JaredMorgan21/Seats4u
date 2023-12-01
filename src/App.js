@@ -76,11 +76,15 @@ function App() {
         <p id="searchShowsList"/>
 
         {/* delete show for venue manager */}
-        venue name: <input id = "venueNameDeleteShow"/><br/>
-        venue password: <input id = "venuePasswordDeleteShow"/><br/>
-        show title: <input id = "showTitleDeleteShow"/><br/>
-        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTime"/><br/>
-        <button onClick = {(e) => deleteShow(document.getElementById("showDeleteResultVM").value)}>Delete Show</button>
+        venue name: <input id = "venueNameDeleteShowVM"/><br/>
+        venue password: <input id = "venuePasswordDeleteShowVM"/><br/>
+        show title: <input id = "showTitleDeleteShowVM"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeVM"/><br/>
+        <button onClick = {(e) => deleteShow(document.getElementById("venueNameDeleteShowVM").value, 
+                                            document.getElementById("venuePasswordDeleteShowVM").value,
+                                            document.getElementById("showTitleDeleteShowVM").value,
+                                            document.getElementById("showStartTimeVM").value)}>Delete Show</button>
+        <p id="showDeleteResultVM"/>
 
     </div>
   );

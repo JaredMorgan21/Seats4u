@@ -53,8 +53,8 @@ export function activateShow() {
 
 }
 
-export function deleteShow(venueName, password, title, startTime) {
-    let data = {  "venueName": venueName,
+export function deleteShow(name, password, title, startTime) {
+    let data = {  "name": name,
                   "password" : password,
                   "title" : title,
                   "startTime" : startTime}
@@ -68,7 +68,7 @@ export function deleteShow(venueName, password, title, startTime) {
         }
     }
 
-    post('/show/delete', data, handler)
+    post('/show/deleteVM', data, handler)
 
 }
 
