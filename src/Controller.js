@@ -78,9 +78,9 @@ export function listShows(name, password) {
 
     const handler = (json) => {
         if(json.statusCode == 200){
-            let shows = "Title, isActive, startTime, usesBlocks, ticketsSold, totalRevenue <br>"
+            let shows = "Title, isActive, startTime, endTime usesBlocks, ticketsSold, totalRevenue <br>"
             for(let s of json.success){
-                shows += s.title + ' ' + s.isActive + ' ' + s.startTime + ' ' + s.usesBlocks + ' ' + s.ticketsSold + ' ' + s.totalRevenue + '<br>'
+                shows += s.title + ' ' + s.isActive + ' ' + s.startTime + ' ' + s.endTime + ' ' + s.usesBlocks + ' ' + s.ticketsSold + ' ' + s.totalRevenue + '<br>'
             }
             
             if(json.success.length == 0) {
@@ -90,7 +90,7 @@ export function listShows(name, password) {
             }
         }
         else{
-            document.getElementById("showsList").innerHTML = "Invalid password"
+            document.getElementById("showsList").innerHTML = "Error: " + json.error //TODO want this instead of writing the errors here?
         }
     }
 
@@ -149,7 +149,7 @@ export function listVenues(adminPass){
             document.getElementById("venuesList").innerHTML = venues
         }
         else{
-            document.getElementById("venuesList").innerHTML = "Invalid password"
+            document.getElementById("venuesList").innerHTML = "Error: " + json.error //TODO want this instead of writing the errors here?
         }
     }
 
