@@ -7,6 +7,7 @@ import {createShow} from './Controller.js'
 import {searchShows} from './Controller.js'
 import {deleteShow} from './Controller.js'
 import {activateShow} from './Controller.js'
+import {listShows} from './Controller.js'
 
 function App() {
   return (
@@ -98,6 +99,12 @@ function App() {
                                             document.getElementById("showStartTimeActivateShow").value)}>Activate Show</button>
         <p id="showActivateResult"/>
 
+        {/* list shows for venue manager */}
+        venue name: <input id = "venueNameListShows"/><br/>
+        venue password: <input id = "venuePasswordListShows"/><br/>
+        <button onClick = {(e) => listShows(document.getElementById("venueNameListShows").value, 
+                                            document.getElementById("venuePasswordListShows").value)}>List Shows</button>
+        <p id="showsList"/>
 
     </div>
   );

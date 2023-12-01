@@ -49,6 +49,10 @@ export function createBlock() {
 
 }
 
+export function deleteBlock() {
+
+}
+
 export function activateShow(name, password, title, startTime) {
     let data = {  "name": name,
                   "password" : password,
@@ -65,6 +69,32 @@ export function activateShow(name, password, title, startTime) {
     }
 
     post('/show/activate', data, handler)
+
+}
+
+export function listShows(name, password) {
+    let data = { "name": name,
+                 "password" : password}
+
+    const handler = (json) => {
+        if(json.statusCode == 200){
+            let shows = "Title, isActive, startTime, usesBlocks, ticketsSold, totalRevenue <br>"
+            for(let s of json.success){
+                shows += s.title + ' ' + s.isActive + ' ' + s.startTime + ' ' + s.usesBlocks + ' ' + s.ticketsSold + ' ' + s.totalRevenue + '<br>'
+            }
+            
+            if(json.success.length == 0) {
+                document.getElementById("showsList").innerHTML = "No shows currently exist for this venue"
+            } else {
+                document.getElementById("showsList").innerHTML = shows
+            }
+        }
+        else{
+            document.getElementById("showsList").innerHTML = "Invalid password"
+        }
+    }
+
+    post('/venue/listShows', data, handler)
 
 }
 
@@ -134,8 +164,8 @@ export function searchShows(title) {
         console.log(json.success)
         if(json.statusCode == 200) {
             let shows = "title, venue, date <br>"
-            for(let v of json.success) {
-                shows += v.title + ' ' + v.venueName + ' ' + v.startTime + '<br>'
+            for(let s of json.success) {
+                shows += s.title + ' ' + s.venueName + ' ' + s.startTime + '<br>'
             }
 
             if(json.success.length == 0) {
