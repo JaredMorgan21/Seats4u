@@ -49,7 +49,22 @@ export function createBlock() {
 
 }
 
-export function activateShow() {
+export function activateShow(name, password, title, startTime) {
+    let data = {  "name": name,
+                  "password" : password,
+                  "title" : title,
+                  "startTime" : startTime}
+    
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("showActivateResult").innerHTML = "Show with name \'" + json.success + "\'" + " is now active"
+        } else {
+            document.getElementById("showActivateResult").innerHTML = "No show with that name exists (or other error)"
+        }
+    }
+
+    post('/show/activate', data, handler)
 
 }
 
@@ -64,7 +79,7 @@ export function deleteShow(name, password, title, startTime) {
         if(json.statusCode == 200) {
             document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
         } else {
-            document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists"
+            document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists (or other error)"
         }
     }
 
@@ -82,7 +97,7 @@ export function deleteVenue(name, venuePass){
             document.getElementById("venueDeleteResult").innerHTML = "Venue deleted with name \'" + json.success + "\'"
         }
         else{
-            document.getElementById("venueDeleteResult").innerHTML = "No venue with that name exists"
+            document.getElementById("venueDeleteResult").innerHTML = "No venue with that name exists (or other error)"
         }
     }
 

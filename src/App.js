@@ -6,6 +6,7 @@ import {listVenues} from './Controller.js'
 import {createShow} from './Controller.js'
 import {searchShows} from './Controller.js'
 import {deleteShow} from './Controller.js'
+import {activateShow} from './Controller.js'
 
 function App() {
   return (
@@ -79,12 +80,24 @@ function App() {
         venue name: <input id = "venueNameDeleteShowVM"/><br/>
         venue password: <input id = "venuePasswordDeleteShowVM"/><br/>
         show title: <input id = "showTitleDeleteShowVM"/><br/>
-        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeVM"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeDeleteShowVM"/><br/>
         <button onClick = {(e) => deleteShow(document.getElementById("venueNameDeleteShowVM").value, 
                                             document.getElementById("venuePasswordDeleteShowVM").value,
                                             document.getElementById("showTitleDeleteShowVM").value,
-                                            document.getElementById("showStartTimeVM").value)}>Delete Show</button>
+                                            document.getElementById("showStartTimeDeleteShowVM").value)}>Delete Show</button>
         <p id="showDeleteResultVM"/>
+
+        {/* activate show for venue manager */}
+        venue name: <input id = "venueNameActivateShow"/><br/>
+        venue password: <input id = "venuePasswordActivateShow"/><br/>
+        show title: <input id = "showTitleActivateShow"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeActivateShow"/><br/>
+        <button onClick = {(e) => activateShow(document.getElementById("venueNameActivateShow").value, 
+                                            document.getElementById("venuePasswordActivateShow").value,
+                                            document.getElementById("showTitleActivateShow").value,
+                                            document.getElementById("showStartTimeActivateShow").value)}>Activate Show</button>
+        <p id="showActivateResult"/>
+
 
     </div>
   );
