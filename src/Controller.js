@@ -141,12 +141,22 @@ export function listVenues(adminPass){
     const handler = (json) => {
         console.log(json.success)
         if(json.statusCode == 200){
-            let venues = "Name, leftCols, leftRows, centerCols, centerRows, rightCols, rightRows <br>"
-            for(let v of json.success){
-                venues += v.venueName + ' ' + v.leftColumns + ' ' + v.leftRows + ' ' + v.centerColumns + ' ' + v.centerRows + ' ' + v.rightColumns + ' ' + v.rightRows + '<br>'
+            let result = "Name, leftCols, leftRows, centerCols, centerRows, rightCols, rightRows <br>"
+            for(let v of json.venues){
+                result += v.venueName + ' ' + v.leftColumns + ' ' + v.leftRows + ' ' + v.centerColumns + ' ' + v.centerRows + ' ' + v.rightColumns + ' ' + v.rightRows + '<br>'
+                //TODO FIXME
+                //ARRAYS INSIDE OF ARRAYS AHHHHH
+                for(let s of json.shows) {
+                    for(let show of s) {
+                        if (show.venueName === v.venueName) { //could probably optimize
+                            result += '-----' + show.title + ' ' + show.startTime + '<br>' //add more info later, tab doesn't work??
+                        }
+                    }
+                    
+                }
             }
             
-            document.getElementById("venuesList").innerHTML = venues
+            document.getElementById("venuesList").innerHTML = result
         }
         else{
             document.getElementById("venuesList").innerHTML = "Error: " + json.error //TODO want this instead of writing the errors here?
