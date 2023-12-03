@@ -203,14 +203,13 @@ export function deleteShowAdmin(adminPass, name, title, startTime) {
     post('/show/deleteAdmin', data, handler)
 }
 
-//TODO for iteration 2 (not completed!!)
 export function generateReportAdmin(adminPass) {
     let data  = {"password" : adminPass}
 
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200) {
-            document.getElementById("adminShowsReport").innerHTML = "shows report goes here"
+            document.getElementById("adminShowsReport").innerHTML = json.success //doesn't factor in new line characters
         } else {
             document.getElementById("adminShowsReport").innerHTML = "Error: " + json.error 
         }
@@ -247,9 +246,26 @@ export function searchShows(title) {
 
 }
 
-//TODO for iteration 2
 export function listActiveShows() {
     searchShows("");
+}
+
+//TODO for iteration 2 (not finished!!)
+export function showAvailableSeats(name, startTime) {
+    let data = {"name" : name,
+                "startTime" : startTime}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("showSeatsResult").innerHTML = json.success
+        } else {
+            document.getElementById("showSeatsResult").innerHTML = "Error: " + json.error
+        }
+    }
+
+    post('show/showAvailableSeats', data, handler)
+
 }
 
 //TODO for iteration 2 (not finished!!)

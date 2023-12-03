@@ -13,6 +13,7 @@ import {generateReportAdmin} from './Controller.js'
 import {createBlock} from './Controller.js'
 import {purchaseSeats} from './Controller.js'
 import {listActiveShows} from './Controller.js'
+import {showAvailableSeats} from './Controller.js'
 
 function App() {
   return (
@@ -82,7 +83,6 @@ function App() {
         <button onClick = {(e) => searchShows(document.getElementById("searchShowInput").value)}>Search!</button>
             {/* list active shows - same as search shows except give it an empty string*/}
             <button onClick = {(e) => listActiveShows()}>List Active Shows</button>
-            <p id="activeShowsList"/>
         <p id="searchShowsList"/>
 
         {/* delete show for venue manager */}
@@ -156,6 +156,12 @@ function App() {
                                               document.getElementById("seatsPurchaseSeats").value)}>Purchase Seats</button>
         <p id="purchaseSeatsResult"/>
 
+        {/* show available seats for consumer */}
+        venue name: <input id = "venueNameShowSeats"/><br/>
+        show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeShowSeats"/><br/>
+        <button onClick = {(e) => showAvailableSeats(document.getElementById("venueNameShowSeats").value,
+                                                   document.getElementById("showStartTimeShowSeats").value)}>Show Available Seats</button>
+        <p id="showSeatsResult"/>
         
 
 
