@@ -250,7 +250,7 @@ export function listActiveShows() {
     searchShows("");
 }
 
-//TODO for iteration 2 (not finished!!)
+//TODO for iteration 2
 export function showAvailableSeats(name, startTime) {
     let data = {"venueName" : name,
                 "startTime" : startTime}
