@@ -11,6 +11,8 @@ import {listShows} from './Controller.js'
 import {deleteShowAdmin} from './Controller.js'
 import {generateReportAdmin} from './Controller.js'
 import {createBlock} from './Controller.js'
+import {purchaseSeats} from './Controller.js'
+import {listActiveShows} from './Controller.js'
 
 function App() {
   return (
@@ -78,6 +80,9 @@ function App() {
         {/* search shows for the consumer */}
         search: <input id = "searchShowInput"/><br/>
         <button onClick = {(e) => searchShows(document.getElementById("searchShowInput").value)}>Search!</button>
+            {/* list active shows - same as search shows except give it an empty string*/}
+            <button onClick = {(e) => listActiveShows()}>List Active Shows</button>
+            <p id="activeShowsList"/>
         <p id="searchShowsList"/>
 
         {/* delete show for venue manager */}
@@ -141,6 +146,18 @@ function App() {
                                               document.getElementById("endRowCreateBlock").value,
                                               document.getElementById("priceCreateBlock").value)}>Create Block</button>
         <p id="createBlockResult"/>
+
+        {/* purchase seats for consumer */}
+        venue name: <input id = "venueNamePurchaseSeats"/><br/>
+        show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimePurchaseSeats"/><br/>
+        seats 'figure out how to format later': <input id = "seatsPurchaseSeats"/><br/>
+        <button onClick = {(e) => purchaseSeats(document.getElementById("venueNamePurchaseSeats").value,
+                                              document.getElementById("showStartTimePurchaseSeats").value,
+                                              document.getElementById("seatsPurchaseSeats").value)}>Purchase Seats</button>
+        <p id="purchaseSeatsResult"/>
+
+        
+
 
     </div>
   );

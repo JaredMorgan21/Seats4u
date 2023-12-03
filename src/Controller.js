@@ -109,7 +109,7 @@ export function listShows(name, password) {
             }
         }
         else{
-            document.getElementById("showsList").innerHTML = "Error: " + json.error //TODO want this instead of writing the errors here?
+            document.getElementById("showsList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
         }
     }
 
@@ -203,6 +203,7 @@ export function deleteShowAdmin(adminPass, name, title, startTime) {
     post('/show/deleteAdmin', data, handler)
 }
 
+//TODO for iteration 2 (not completed!!)
 export function generateReportAdmin(adminPass) {
     let data  = {"password" : adminPass}
 
@@ -246,6 +247,26 @@ export function searchShows(title) {
 
 }
 
-export function purchaseSeats() {
+//TODO for iteration 2
+export function listActiveShows() {
+    searchShows("");
+}
+
+//TODO for iteration 2 (not finished!!)
+export function purchaseSeats(name, startTime, seats) {
+    let data = {"name" : name,
+                "startTime" : startTime,
+                "seats" : seats}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("purchaseSeatsResult").innerHTML = "seats purchased go here"
+        } else {
+            document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
+        }
+    }
+
+    post('show/purchaseSeats', data, handler)
 
 }
