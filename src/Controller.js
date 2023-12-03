@@ -17,7 +17,7 @@ export function createVenue(name, password, leftRows, leftCols, centerRows, cent
             document.getElementById("result").innerHTML = "Venue created with name \'" + json.success + "\'"
         }
         else{
-            document.getElementById("result").innerHTML = "Venue with that name already exists"
+            document.getElementById("result").innerHTML = "Error: " + json.error
         }
     }
 
@@ -38,7 +38,7 @@ export function createShow(venueName, password, title, startTime, endTime, usesB
             document.getElementById("resultShow").innerHTML = "Show created with name \'" + json.success + "\'"
         }
         else{
-            document.getElementById("resultShow").innerHTML = "Error. No work"
+            document.getElementById("resultShow").innerHTML = "Error: " + json.error
         }
     }
 
@@ -83,7 +83,7 @@ export function activateShow(name, password, title, startTime) {
         if(json.statusCode == 200) {
             document.getElementById("showActivateResult").innerHTML = "Show with name \'" + json.success + "\'" + " is now active"
         } else {
-            document.getElementById("showActivateResult").innerHTML = "No show with that name exists (or other error)"
+            document.getElementById("showActivateResult").innerHTML = "Error: " + json.error
         }
     }
 
@@ -128,7 +128,7 @@ export function deleteShow(name, password, title, startTime) {
         if(json.statusCode == 200) {
             document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
         } else {
-            document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists (or other error)"
+            document.getElementById("showDeleteResultVM").innerHTML = "Error: " + json.error
         }
     }
 
@@ -146,7 +146,7 @@ export function deleteVenue(name, venuePass){
             document.getElementById("venueDeleteResult").innerHTML = "Venue deleted with name \'" + json.success + "\'"
         }
         else{
-            document.getElementById("venueDeleteResult").innerHTML = "No venue with that name exists (or other error)"
+            document.getElementById("venueDeleteResult").innerHTML = "Error: " + json.error
         }
     }
 
@@ -196,7 +196,7 @@ export function deleteShowAdmin(adminPass, name, title, startTime) {
         if(json.statusCode == 200) {
             document.getElementById("showDeleteResultA").innerHTML = "Show deleted with name \'" + json.success + "\'"
         } else {
-            document.getElementById("showDeleteResultA").innerHTML = "No show with that name exists (or other error)"
+            document.getElementById("showDeleteResultA").innerHTML = "Error: " + json.error
         }
     }
 
@@ -238,7 +238,7 @@ export function searchShows(title) {
 
 
         } else {
-            document.getElementById("searchShowsList").innerHTML = "some sort of error maybe change later"
+            document.getElementById("searchShowsList").innerHTML = "Error: " + json.error
         }
     }
 
