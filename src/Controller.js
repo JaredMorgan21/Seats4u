@@ -232,7 +232,10 @@ export function searchShows(title) {
 
             if(json.success.length == 0) {
                 document.getElementById("searchShowsList").innerHTML = "No shows match your search"
-            } else {
+            } else { 
+                //Fixing the formating , getting rid of those weird T and Z characters
+                shows = shows.replace(/T/g, " ")
+                shows = shows.replace(/Z/g, " ")
                 document.getElementById("searchShowsList").innerHTML = shows
             }
 
@@ -250,7 +253,6 @@ export function listActiveShows() {
     searchShows("");
 }
 
-//TODO for iteration 2
 export function showAvailableSeats(name, startTime) {
     let data = {"venueName" : name,
                 "startTime" : startTime}
@@ -283,9 +285,11 @@ export function showAvailableSeats(name, startTime) {
 
 //TODO for iteration 2 (not finished!!)
 //each seat has a column and a row
-export function purchaseSeats(name, startTime, seats) {
+//figure out how to have the user input the seats
+export function purchaseSeats(name, startTime, section, seats) {
     let data = {"name" : name,
                 "startTime" : startTime,
+                "section" : section,
                 "seats" : seats}
 
     const handler = (json) => {
