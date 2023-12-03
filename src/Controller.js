@@ -144,12 +144,12 @@ export function listVenues(adminPass){
             let result = "Name, leftCols, leftRows, centerCols, centerRows, rightCols, rightRows <br>"
             for(let v of json.venues){
                 result += v.venueName + ' ' + v.leftColumns + ' ' + v.leftRows + ' ' + v.centerColumns + ' ' + v.centerRows + ' ' + v.rightColumns + ' ' + v.rightRows + '<br>'
-                //TODO FIXME
+        
                 //ARRAYS INSIDE OF ARRAYS AHHHHH
                 for(let s of json.shows) {
                     for(let show of s) {
                         if (show.venueName === v.venueName) { //could probably optimize
-                            result += '-----' + show.title + ' ' + show.startTime + '<br>' //add more info later, tab doesn't work??
+                            result += '-----' + show.title + ' ' + show.startTime + '<br>' 
                         }
                     }
                     
@@ -164,6 +164,39 @@ export function listVenues(adminPass){
     }
 
     post('/venue/list', data, handler)
+}
+
+export function deleteShowAdmin(adminPass, name, title, startTime) {
+    let data = {"password" : adminPass,
+                "name" : name,
+                "title" : title,
+                "startTime" : startTime}
+    
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("showDeleteResultA").innerHTML = "Show deleted with name \'" + json.success + "\'"
+        } else {
+            document.getElementById("showDeleteResultA").innerHTML = "No show with that name exists (or other error)"
+        }
+    }
+
+    post('/show/deleteAdmin', data, handler)
+}
+
+export function generateReportAdmin(adminPass) {
+    let data  = {"password" : adminPass}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("adminShowsReport").innerHTML = "shows report goes here"
+        } else {
+            document.getElementById("adminShowsReport").innerHTML = "Error: " + json.error 
+        }
+    }
+
+    post('/show/generateReportAdmin', data, handler)
 }
 
 

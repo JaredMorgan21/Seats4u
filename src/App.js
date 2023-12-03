@@ -8,6 +8,8 @@ import {searchShows} from './Controller.js'
 import {deleteShow} from './Controller.js'
 import {activateShow} from './Controller.js'
 import {listShows} from './Controller.js'
+import {deleteShowAdmin} from './Controller.js'
+import {generateReportAdmin} from './Controller.js'
 
 function App() {
   return (
@@ -105,6 +107,22 @@ function App() {
         <button onClick = {(e) => listShows(document.getElementById("venueNameListShows").value, 
                                             document.getElementById("venuePasswordListShows").value)}>List Shows</button>
         <p id="showsList"/>
+
+        {/* delete show for admin */}
+        admin password: <input id = "adminPassDeleteShowA"/><br/>
+        venue name: <input id = "venueNameDeleteShowA"/><br/>
+        show title: <input id = "showTitleDeleteShowA"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeDeleteShowA"/><br/>
+        <button onClick = {(e) => deleteShowAdmin(document.getElementById("adminPassDeleteShowA").value, 
+                                                  document.getElementById("venueNameDeleteShowA").value,
+                                                  document.getElementById("showTitleDeleteShowA").value,
+                                                  document.getElementById("showStartTimeDeleteShowA").value)}>Admin Delete Show</button>
+        <p id="showDeleteResultA"/>
+
+        {/* generate shows report for admin */}
+        admin password: <input id = "adminPassShowsReport"/><br/>
+        <button onClick = {(e) => generateReportAdmin(document.getElementById("adminPassShowsReport").value)}>Admin Shows Report</button>
+        <p id="adminShowsReport"/>
 
     </div>
   );
