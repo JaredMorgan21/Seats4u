@@ -254,11 +254,21 @@ export function listActiveShows() {
 export function showAvailableSeats(name, startTime) {
     let data = {"name" : name,
                 "startTime" : startTime}
-
+    
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200) {
-            document.getElementById("showSeatsResult").innerHTML = json.success
+            let seats = "row, column, section <br>"
+            for(let s of json.success) {
+                seats += s.row + ' ' + s.column + ' ' + s.section + '<br>'
+            }
+    
+            if(json.success.length == 0) {
+                document.getElementById("showSeatsResult").innerHTML = "No available seats"
+            } else {
+                document.getElementById("showSeatsResult").innerHTML = seats
+            }
+
         } else {
             document.getElementById("showSeatsResult").innerHTML = "Error: " + json.error
         }
@@ -269,6 +279,7 @@ export function showAvailableSeats(name, startTime) {
 }
 
 //TODO for iteration 2 (not finished!!)
+//each seat has a column and a row
 export function purchaseSeats(name, startTime, seats) {
     let data = {"name" : name,
                 "startTime" : startTime,
