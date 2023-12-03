@@ -252,11 +252,14 @@ export function listActiveShows() {
 
 //TODO for iteration 2 (not finished!!)
 export function showAvailableSeats(name, startTime) {
-    let data = {"name" : name,
+    let data = {"venueName" : name,
                 "startTime" : startTime}
     
+
     const handler = (json) => {
         console.log(json)
+        console.log(name)
+        console.log(startTime)
         if(json.statusCode == 200) {
             let seats = "row, column, section <br>"
             for(let s of json.success) {
