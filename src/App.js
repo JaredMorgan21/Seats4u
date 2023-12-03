@@ -10,6 +10,7 @@ import {activateShow} from './Controller.js'
 import {listShows} from './Controller.js'
 import {deleteShowAdmin} from './Controller.js'
 import {generateReportAdmin} from './Controller.js'
+import {createBlock} from './Controller.js'
 
 function App() {
   return (
@@ -123,6 +124,23 @@ function App() {
         admin password: <input id = "adminPassShowsReport"/><br/>
         <button onClick = {(e) => generateReportAdmin(document.getElementById("adminPassShowsReport").value)}>Admin Shows Report</button>
         <p id="adminShowsReport"/>
+
+        {/* create blocks for venue manager */}
+        venue name: <input id = "venueNameCreateBlock"/><br/>
+        venue password: <input id = "venuePasswordCreateBlock"/><br/>
+        show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeCreateBlock"/><br/>
+        section 'leftSection, centerSection, or rightSection': <input id = "sectionCreateBlock"/><br/>
+        start row: <input id = "startRowCreateBlock"/><br/>
+        end row: <input id = "endRowCreateBlock"/><br/>
+        price: <input id = "priceCreateBlock"/><br/>
+        <button onClick = {(e) => createBlock(document.getElementById("venueNameCreateBlock").value,
+                                              document.getElementById("venuePasswordCreateBlock").value,
+                                              document.getElementById("showStartTimeCreateBlock").value,
+                                              document.getElementById("sectionCreateBlock").value,
+                                              document.getElementById("startRowCreateBlock").value,
+                                              document.getElementById("endRowCreateBlock").value,
+                                              document.getElementById("priceCreateBlock").value)}>Create Block</button>
+        <p id="createBlockResult"/>
 
     </div>
   );

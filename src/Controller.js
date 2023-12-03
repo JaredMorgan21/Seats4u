@@ -45,8 +45,27 @@ export function createShow(venueName, password, title, startTime, endTime, usesB
     post('/show/create', data, handler)
 }
 
-export function createBlock() {
+//TODO something is wrong with this function (doesn't work locally)
+export function createBlock(name, password, startTime, section, startRow, endRow, price) {
+    let data = {  "name": name,
+                  "password" : password,
+                  "startTime" : startTime,
+                  "section" : section,
+                  "startRow" : startRow,
+                  "endRow" : endRow,
+                  "price" : price}
 
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200){
+            document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: [insert blocks created here]" //TODO 
+        }
+        else{
+            document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
+        }
+    }
+
+    post('/show/createBlock', data, handler)
 }
 
 export function deleteBlock() {
@@ -224,5 +243,9 @@ export function searchShows(title) {
     }
 
     post('/show/search', data, handler) //this is where it talks to API?
+
+}
+
+export function purchaseSeats() {
 
 }
