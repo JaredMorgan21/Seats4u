@@ -370,7 +370,7 @@ export function purchaseSeats(name, startTime, title, seats) {
         if(json.statusCode == 200) {
             let seats = "The following seats were purchased for " + title + ": <br>"
             for(let s of json.success) {
-                seats += s.column + s.row + '<br>'
+                seats += s.column + s.row + ' ' + s.section + '<br>'
             }
             document.getElementById("purchaseSeatsResult").innerHTML = seats
         } else {
