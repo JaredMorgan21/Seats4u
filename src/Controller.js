@@ -287,15 +287,31 @@ export function showAvailableSeats(name, startTime) {
 //each seat has a column and a row
 //figure out how to have the user input the seats
 export function purchaseSeats(name, startTime, section, seats) {
-    let data = {"name" : name,
+    let arraySeats = seats.split(", ")
+    console.log(arraySeats)
+    let seatsForLambda = []
+    for(let element of arraySeats) {
+        let dict = {
+            "column" : element[0],
+            "row" : element[1]
+        }
+        seatsForLambda.push(dict)
+    }
+    console.log(seatsForLambda)
+    
+    let data = {"venue" : name,
                 "startTime" : startTime,
                 "section" : section,
-                "seats" : seats}
+                "seats" : seatsForLambda}
 
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200) {
-            document.getElementById("purchaseSeatsResult").innerHTML = "seats purchased go here"
+            let seats = "The following seats were purchased for " + section + ": <br>"
+            for(let s of json.success) {
+                seats += s.column + s.row + '<br>'
+            }
+            document.getElementById("purchaseSeatsResult").innerHTML = seats
         } else {
             document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
         }
