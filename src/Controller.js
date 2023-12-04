@@ -272,7 +272,6 @@ export function listActiveShows() {
 export function showAvailableSeats(name, startTime) {
     let data = {"venueName" : name,
                 "startTime" : startTime}
-    
 
     const handler = (json) => {
         console.log(json)
@@ -283,11 +282,38 @@ export function showAvailableSeats(name, startTime) {
             for(let s of json.success) {
                 seats += s.row + ' ' + s.column + ' ' + s.section + '<br>'
             }
+
+            let prevCol = "1";
+            let prevSection = "leftSection";
+            let display = "leftSection" + "<table> <tr> <td>1</td>"
+            for(let seat of json.success){
+                if(seat.section != prevSection){
+                    prevSection = seat.section
+                    display += "</table> " + seat.section + "<table> <tr>"
+                }
+
+                if(seat.column != prevCol){
+                    prevCol = seat.column
+                    display += "</tr><tr><td>" + seat.column + "</td>"
+                }
+
+                if(seat.isAvailable){
+                    display += "<td>x</td>"
+                }
+                else{
+                    display += "<td> </td>"
+                }
+            }
+
+            display += "</tr></table>"
+
+//            console.log(seats)
+//            console.log(display)
     
             if(json.success.length == 0) {
                 document.getElementById("showSeatsResult").innerHTML = "No available seats"
             } else {
-                document.getElementById("showSeatsResult").innerHTML = seats
+                document.getElementById("showSeatsResult").innerHTML = display
             }
 
         } else {
