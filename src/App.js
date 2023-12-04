@@ -14,6 +14,7 @@ import {createBlock} from './Controller.js'
 import {purchaseSeats} from './Controller.js'
 import {listActiveShows} from './Controller.js'
 import {showAvailableSeats} from './Controller.js'
+import {deleteBlock} from './Controller.js'
 
 function App() {
   return (
