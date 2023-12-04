@@ -150,12 +150,12 @@ function App() {
         {/* purchase seats for consumer */}
         venue name: <input id = "venueNamePurchaseSeats"/><br/>
         show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimePurchaseSeats"/><br/>
-        section 'leftSection, centerSection, or rightSection': <input id = "sectionPurchaseSeats"/><br/>
-        seats 'columnrow, columnrow,...': <input id = "seatsPurchaseSeats"/><br/>
+        title: <input id = "titlePurchaseSeats"/><br/>
+        seats 'columnrow section, ...' (ex. 1B leftSection, 2C rightSection, 4G centerSection): <input id = "seatsPurchaseSeats"/><br/>
         
         <button onClick = {(e) => purchaseSeats(document.getElementById("venueNamePurchaseSeats").value,
                                               document.getElementById("showStartTimePurchaseSeats").value,
-                                              document.getElementById("sectionPurchaseSeats").value,
+                                              document.getElementById("titlePurchaseSeats").value,
                                               document.getElementById("seatsPurchaseSeats").value)}>Purchase Seats</button>
         <p id="purchaseSeatsResult"/>
 
