@@ -97,10 +97,13 @@ export function listShows(name, password) {
 
     const handler = (json) => {
         if(json.statusCode == 200){
-            let shows = "Title, isActive, startTime, endTime usesBlocks, ticketsSold, totalRevenue <br>"
+            let shows = "<table> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
             for(let s of json.success){
-                shows += s.title + ' ' + s.isActive + ' ' + s.startTime + ' ' + s.endTime + ' ' + s.usesBlocks + ' ' + s.ticketsSold + ' ' + s.totalRevenue + '<br>'
+                s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
+                s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
+                shows += "<tr> <td>" + s.title + '</td><td>' + s.isActive + '</td><td>' + s.startTime + '</td><td>' + s.endTime + '</td><td>' + (s.usesBlocks ? "true" : "false") + '</td><td>' + s.ticketsSold + '</td><td>' + s.totalRevenue + '</tr>'
             }
+            shows += "</table>"
             
             if(json.success.length == 0) {
                 document.getElementById("showsList").innerHTML = "No shows currently exist for this venue"
@@ -184,6 +187,8 @@ export function listVenues(adminPass){
                 for(let s of json.shows) {
                     for(let show of s) {
                         if (show.venueName === v.venueName) { //could probably optimize
+                            show.startTime = show.startTime.replace(/T/g, " ")
+                            show.startTime = show.startTime.replace(/Z/g, " ")
                             result += '-----' + show.title + ' ' + show.startTime + '<br>' 
                         }
                     }
@@ -290,7 +295,7 @@ export function showAvailableSeats(name, startTime) {
             for(let i = 0; i < json.venue.leftRows; i++){
                 display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
             }
-            display += "</tr><tr><td>1</td>"
+            display += "</tr><tr><th>1</th>"
 
             for(let seat of json.success){
                 if(seat.section != prevSection){
@@ -313,7 +318,7 @@ export function showAvailableSeats(name, startTime) {
 
                 if(seat.column != prevCol){
                     prevCol = seat.column
-                    display += "</tr><tr><td>" + seat.column + "</td>"
+                    display += "</tr><tr><th>" + seat.column + "</th>"
                 }
 
                 if(seat.isAvailable){
