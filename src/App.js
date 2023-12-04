@@ -1,6 +1,6 @@
 //import logo from './logo.svg';
 //import './App.css';
-import {createVenue} from './Controller.js'
+import {createVenue, generateReportVM} from './Controller.js'
 import {deleteVenue} from './Controller.js'
 import {listVenues} from './Controller.js'
 import {createShow} from './Controller.js'
@@ -166,7 +166,12 @@ function App() {
                                                    document.getElementById("showStartTimeShowSeats").value)}>Show Available Seats</button>
         <p id="showSeatsResult"/>
         
-
+        {/* generate show report for venue manager */}
+        venue name: <input id = "venueNameShowsReportVM"/><br/>
+        venue password: <input id = "venuePasswordShowsReportVM"/><br/>
+        <button onClick = {(e) => generateReportVM(document.getElementById("venueNameShowsReportVM").value,
+                                                   document.getElementById("venuePasswordShowsReportVM").value)}>Venue Manager Shows Report</button>
+        <p id="showsReportVM"/>
 
     </div>
   );
