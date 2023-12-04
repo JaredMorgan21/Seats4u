@@ -47,7 +47,7 @@ export function createShow(venueName, password, title, startTime, endTime, usesB
 
 //TODO something is wrong with this function (doesn't work locally)
 export function createBlock(name, password, startTime, section, startRow, endRow, price) {
-    let data = {  "name": name,
+    let data = {  "venueName": name,
                   "password" : password,
                   "startTime" : startTime,
                   "section" : section,
@@ -58,7 +58,7 @@ export function createBlock(name, password, startTime, section, startRow, endRow
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200){
-            document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: [insert blocks created here]" //TODO 
+            document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: \'" + json.success + "\'" //TODO 
         }
         else{
             document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
@@ -68,8 +68,25 @@ export function createBlock(name, password, startTime, section, startRow, endRow
     post('/show/createBlock', data, handler)
 }
 
-export function deleteBlock() {
 
+export function deleteBlock(name, password, startTime, section, startRow, endRow) {
+    let data = {  "venueName": name,
+                  "password" : password,
+                  "startTime" : startTime,
+                  "section" : section,
+                  "startRow" : startRow,
+                  "endRow" : endRow}
+                  
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200){
+            document.getElementById("deleteBlockResult").innerHTML = "The following blocks have been deleted: \'" + json.success + "\'" //TODO 
+        }
+        else{
+            document.getElementById("deleteBlockResult").innerHTML = "Error: " + json.error
+        }
+    }
+    post('/show/deleteBlock', data, handler)
 }
 
 export function activateShow(name, password, title, startTime) {
@@ -380,7 +397,7 @@ export function purchaseSeats(name, startTime, title, seats) {
         if(json.statusCode == 200) {
             let seats = "The following seats were purchased for " + title + ": <br>"
             for(let s of json.success) {
-                seats += s.column + s.row + '<br>'
+                seats += s.column + s.row + ' ' + s.section + '<br>'
             }
             document.getElementById("purchaseSeatsResult").innerHTML = seats
         } else {

@@ -149,6 +149,21 @@ function App() {
                                               document.getElementById("priceCreateBlock").value)}>Create Block</button>
         <p id="createBlockResult"/>
 
+         {/* delete blocks for venue manager */}
+        venue name: <input id = "venueNameDeleteBlock"/><br/>
+        venue password: <input id = "venuePasswordDeleteBlock"/><br/>
+        show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeDeleteBlock"/><br/>
+        section 'leftSection, centerSection, or rightSection': <input id = "sectionDeleteBlock"/><br/>
+        start row: <input id = "startRowDeleteBlock"/><br/>
+        end row: <input id = "endRowDeleteBlock"/><br/>
+        <button onClick = {(e) => deleteBlock(document.getElementById("venueNameDeleteBlock").value,
+                                              document.getElementById("venuePasswordDeleteBlock").value,
+                                              document.getElementById("showStartTimeDeleteBlock").value,
+                                              document.getElementById("sectionDeleteBlock").value,
+                                              document.getElementById("startRowDeleteBlock").value,
+                                              document.getElementById("endRowDeleteBlock").value)}>Delete Block</button>
+        <p id="deleteBlockResult"/>
+
         {/* purchase seats for consumer */}
         venue name: <input id = "venueNamePurchaseSeats"/><br/>
         show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimePurchaseSeats"/><br/>
