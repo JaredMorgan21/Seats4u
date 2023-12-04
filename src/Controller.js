@@ -285,11 +285,30 @@ export function showAvailableSeats(name, startTime) {
 
             let prevCol = "1";
             let prevSection = "leftSection";
-            let display = "leftSection" + "<table> <tr> <td>1</td>"
+            let display = "leftSection" + "<table> <tr><td> </td>"
+
+            for(let i = 0; i < json.venue.leftRows; i++){
+                display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
+            }
+            display += "</tr><tr><td>1</td>"
+
             for(let seat of json.success){
                 if(seat.section != prevSection){
                     prevSection = seat.section
-                    display += "</table> " + seat.section + "<table> <tr>"
+                    display += "</table> " + seat.section + "<table> <tr><td> </td>"
+
+                    if(seat.section == "centerSection"){
+                        for(let i = 0; i < json.venue.centerRows; i++){
+                            display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
+                        }
+                    }
+                    else if(seat.section == "rightSection"){
+                        for(let i = 0; i < json.venue.rightRows; i++){
+                            display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
+                        }
+                    }
+
+                    display += "</tr><tr>"
                 }
 
                 if(seat.column != prevCol){
