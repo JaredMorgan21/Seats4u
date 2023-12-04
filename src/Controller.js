@@ -97,11 +97,11 @@ export function listShows(name, password) {
 
     const handler = (json) => {
         if(json.statusCode == 200){
-            let shows = "<table> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
+            let shows = "<table style='width: 80%'> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
             for(let s of json.success){
                 s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
                 s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
-                shows += "<tr> <td>" + s.title + '</td><td>' + s.isActive + '</td><td>' + s.startTime + '</td><td>' + s.endTime + '</td><td>' + (s.usesBlocks ? "true" : "false") + '</td><td>' + s.ticketsSold + '</td><td>' + s.totalRevenue + '</tr>'
+                shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue + "</tr>"
             }
             shows += "</table>"
             
@@ -179,23 +179,24 @@ export function listVenues(adminPass){
     const handler = (json) => {
         console.log(json.success)
         if(json.statusCode == 200){
-            let result = "Name, leftCols, leftRows, centerCols, centerRows, rightCols, rightRows <br>"
+            let result = "<table style='width: 80%'> <tr> <th>Name</th> <th>leftCols</th> <th>leftRows</th> <th>centerCols</th> <th>centerRows</th> <th>rightCols</th> <th>rightRows</th> </tr>";
             for(let v of json.venues){
-                result += v.venueName + ' ' + v.leftColumns + ' ' + v.leftRows + ' ' + v.centerColumns + ' ' + v.centerRows + ' ' + v.rightColumns + ' ' + v.rightRows + '<br>'
-        
+                result += "<tr> <td style='text-align: center'>" + v.venueName + "</td><td  style='text-align: center'>" + v.leftColumns + "</td><td  style='text-align: center'>" + v.leftRows + "</td><td  style='text-align: center'>" + v.centerColumns + "</td><td  style='text-align: center'>" + v.centerRows + "</td><td  style='text-align: center'>" + v.rightColumns + "</td><td  style='text-align: center'>" + v.rightRows + "</td></tr>"
+
                 //ARRAYS INSIDE OF ARRAYS AHHHHH
                 for(let s of json.shows) {
                     for(let show of s) {
                         if (show.venueName === v.venueName) { //could probably optimize
                             show.startTime = show.startTime.replace(/T/g, " ")
                             show.startTime = show.startTime.replace(/Z/g, " ")
-                            result += '-----' + show.title + ' ' + show.startTime + '<br>' 
+                            result += "<tr> <td  style='text-align: center'>-----</td> <td  style='text-align: center'>" + show.title + "</td><td  style='text-align: center'>" + show.startTime + "</td></tr>"
                         }
                     }
-                    
+
                 }
             }
-            
+            result += "</table>"
+            console.log(result)
             document.getElementById("venuesList").innerHTML = result
         }
         else{
@@ -211,7 +212,7 @@ export function deleteShowAdmin(adminPass, name, title, startTime) {
                 "name" : name,
                 "title" : title,
                 "startTime" : startTime}
-    
+
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200) {
@@ -229,10 +230,13 @@ export function generateReportAdmin(adminPass) {
 
     const handler = (json) => {
         console.log(json)
+//        json.success = "<table><tr><td>" + json.success
+//        json.success = json.success.replaceAll("<br>", "</tr><tr>").replaceAll(" ", "</td><td>")
+        console.log(json.success)
         if(json.statusCode == 200) {
-            document.getElementById("adminShowsReport").innerHTML = json.success 
+            document.getElementById("adminShowsReport").innerHTML = json.success
         } else {
-            document.getElementById("adminShowsReport").innerHTML = "Error: " + json.error 
+            document.getElementById("adminShowsReport").innerHTML = "Error: " + json.error
         }
     }
 
@@ -246,14 +250,15 @@ export function searchShows(title) {
     const handler = (json) => {
         console.log(json.success)
         if(json.statusCode == 200) {
-            let shows = "title, venue, date <br>"
+            let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th>"
             for(let s of json.success) {
-                shows += s.title + ' ' + s.venueName + ' ' + s.startTime + '<br>'
+                shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td></tr>"
             }
+            shows += "</table>"
 
             if(json.success.length == 0) {
                 document.getElementById("searchShowsList").innerHTML = "No shows match your search"
-            } else { 
+            } else {
                 //Fixing the formating , getting rid of those weird T and Z characters
                 shows = shows.replace(/T/g, " ")
                 shows = shows.replace(/Z/g, " ")

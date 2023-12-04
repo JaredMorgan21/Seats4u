@@ -17,7 +17,9 @@ import {showAvailableSeats} from './Controller.js'
 
 function App() {
   return (
+
     <div className = "App">
+
         name: <input id = "venueName"/><br/>
         password: <input id = "venuePassword"/><br/>
 
