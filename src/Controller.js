@@ -114,7 +114,23 @@ export function listShows(name, password) {
     }
 
     post('/venue/listShows', data, handler)
+}
 
+export function generateReportVM(name, password) {
+    let data = {"name" : name,
+                "venueCredentials" : password}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200) {
+            document.getElementById("showsReportVM").innerHTML = json.success 
+        } else {
+            document.getElementById("showsReportVM").innerHTML = "Error: " + json.error 
+        }
+    }
+
+    post('/show/generateReportVM', data, handler)
+    
 }
 
 export function deleteShow(name, password, title, startTime) {
@@ -209,7 +225,7 @@ export function generateReportAdmin(adminPass) {
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200) {
-            document.getElementById("adminShowsReport").innerHTML = json.success //doesn't factor in new line characters
+            document.getElementById("adminShowsReport").innerHTML = json.success 
         } else {
             document.getElementById("adminShowsReport").innerHTML = "Error: " + json.error 
         }
@@ -283,9 +299,7 @@ export function showAvailableSeats(name, startTime) {
 
 }
 
-//TODO for iteration 2 (not finished!!)
-//each seat has a column and a row
-//figure out how to have the user input the seats
+//TODO for iteration 2 
 export function purchaseSeats(name, startTime, section, seats) {
     let arraySeats = seats.split(", ")
     console.log(arraySeats)
