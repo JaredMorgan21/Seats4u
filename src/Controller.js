@@ -350,14 +350,16 @@ export function showAvailableSeats(name, startTime) {
 }
 
 //TODO for iteration 2 
-export function purchaseSeats(name, startTime, section, seats) {
+export function purchaseSeats(name, startTime, title, seats) {
     let arraySeats = seats.split(", ")
     console.log(arraySeats)
     let seatsForLambda = []
     for(let element of arraySeats) {
+        let seperating = element.split(" ")
         let dict = {
-            "column" : element[0],
-            "row" : element[1]
+            "column" : seperating[0][0],
+            "row" : seperating[0][1],
+            "section" : seperating[1], //assuming user inputs everything correctly
         }
         seatsForLambda.push(dict)
     }
@@ -365,13 +367,13 @@ export function purchaseSeats(name, startTime, section, seats) {
     
     let data = {"venue" : name,
                 "startTime" : startTime,
-                "section" : section,
+                "title" : title,
                 "seats" : seatsForLambda}
 
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200) {
-            let seats = "The following seats were purchased for " + section + ": <br>"
+            let seats = "The following seats were purchased for " + title + ": <br>"
             for(let s of json.success) {
                 seats += s.column + s.row + '<br>'
             }
