@@ -11,10 +11,11 @@ import {listShows} from './Controller.js'
 import {deleteShowAdmin} from './Controller.js'
 import {generateReportAdmin} from './Controller.js'
 import {createBlock} from './Controller.js'
+import {deleteBlock} from './Controller.js'
+import {listBlocks} from './Controller.js'
 import {purchaseSeats} from './Controller.js'
 import {listActiveShows} from './Controller.js'
 import {showAvailableSeats} from './Controller.js'
-import {deleteBlock} from './Controller.js'
 
 function App() {
   return (
@@ -151,6 +152,15 @@ function App() {
                                               document.getElementById("endRowCreateBlock").value,
                                               document.getElementById("priceCreateBlock").value)}>Create Block</button>
         <p id="createBlockResult"/>
+
+        {/* list blocks for venue manager */}
+        venue name: <input id = "venueNameListBlocks"/><br/>
+        venue password: <input id = "venuePasswordListBlocks"/><br/>
+        show start date/time 'YYYY-MM-DD hh:mm:ss': <input id = "showStartTimeListBlock"/><br/>
+        <button onClick = {(e) => listBlocks(document.getElementById("venueNameListBlocks").value, 
+                                            document.getElementById("venuePasswordListBlocks").value,
+                                            document.getElementById("showStartTimeListBlock").value)}>List Blocks</button>
+        <p id="blocksList"/>
 
          {/* delete blocks for venue manager */}
         venue name: <input id = "venueNameDeleteBlock"/><br/>

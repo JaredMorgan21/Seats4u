@@ -112,6 +112,34 @@ export function activateShow(name, password, title, startTime) {
 
 }
 
+export function listBlocks(name, password, startTime) {
+    let data = { "name": name,
+                 "password" : password,
+                "startTime" : startTime}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200){
+            let blocks = "<table style='width: 80%'> <tr><th>BlockID</th> <th>price</th> <th>section</th> <th>startRow</th> <th>endRow</th> <th>showID</th></tr>"
+            for(let b of json.success){
+                blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID +  "</tr>"
+            }
+            blocks += "</table>"
+            
+            if(json.success.length == 0) {
+                document.getElementById("blocksList").innerHTML = "No blocks currently exist for this show"
+            } else {
+                document.getElementById("blocksList").innerHTML = blocks
+            }
+        }
+        else{
+            document.getElementById("blocksList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
+        }
+    }
+
+    post('/show/listBlocks', data, handler)
+}
+
 export function listShows(name, password) {
     let data = { "name": name,
                  "password" : password}
