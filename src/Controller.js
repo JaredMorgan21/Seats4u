@@ -273,6 +273,8 @@ export function searchShows(title) {
         if(json.statusCode == 200) {
             let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th>"
             for(let s of json.success) {
+                s.startTime = s.startTime.replace(/T/g, " ")
+                s.startTime = s.startTime.replace(/Z/g, " ")
                 shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td></tr>"
             }
             shows += "</table>"
@@ -280,9 +282,6 @@ export function searchShows(title) {
             if(json.success.length == 0) {
                 document.getElementById("searchShowsList").innerHTML = "No shows match your search"
             } else {
-                //Fixing the formating , getting rid of those weird T and Z characters
-                show.startTime = show.startTime.replace(/T/g, " ")
-                show.startTime = show.startTime.replace(/Z/g, " ")
                 document.getElementById("searchShowsList").innerHTML = shows
             }
 
