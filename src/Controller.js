@@ -45,7 +45,6 @@ export function createShow(venueName, password, title, startTime, endTime, usesB
     post('/show/create', data, handler)
 }
 
-//TODO something is wrong with this function (doesn't work locally)
 export function createBlock(name, password, startTime, section, startRow, endRow, price) {
     let data = {  "venueName": name,
                   "password" : password,
@@ -377,11 +376,11 @@ export function purchaseSeats(name, startTime, title, seats) {
     console.log(arraySeats)
     let seatsForLambda = []
     for(let element of arraySeats) {
-        let seperating = element.split(" ")
+        let separating = element.split(" ")
         let dict = {
-            "column" : seperating[0][0],
-            "row" : seperating[0][1],
-            "section" : seperating[1], //assuming user inputs everything correctly
+            "column" : separating[0][0],
+            "row" : separating[0][1],
+            "section" : separating[1], //assuming user inputs everything correctly
         }
         seatsForLambda.push(dict)
     }
@@ -400,8 +399,20 @@ export function purchaseSeats(name, startTime, title, seats) {
                 seats += s.column + s.row + ' ' + s.section + '<br>'
             }
             document.getElementById("purchaseSeatsResult").innerHTML = seats
-        } else {
-            document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
+        }
+        else {
+            if(json.invalidSeats){
+                let returnStr = "The following seats could not be purchased: <br>"
+
+                for(let s of json.invalidSeats) {
+                    returnStr += s.column + s.row + ' ' + s.section + '<br>'
+                }
+
+                document.getElementById("purchaseSeatsResult").innerHTML = returnStr
+            }
+            else{
+                document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
+            }
         }
     }
 
