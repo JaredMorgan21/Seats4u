@@ -24,13 +24,17 @@ export function createVenue(name, password, leftRows, leftCols, centerRows, cent
     post('/venue/create', data, handler)
 }
 
-export function createShow(venueName, password, title, startTime, endTime, usesBlocks){
+export function createShow(venueName, password, title, startTime, endTime, usesBlocks, optPrice){
+    if (optPrice == "") {
+        optPrice = null
+    }
     let data = {  "venueName": venueName,
                   "password" : password,
                   "title" : title,
                   "startTime" : startTime,
                   "endTime" : endTime,
-                  "usesBlocks" : usesBlocks}
+                  "usesBlocks" : usesBlocks,
+                  "optPrice" : optPrice}
 
     const handler = (json) => {
         console.log(json)
