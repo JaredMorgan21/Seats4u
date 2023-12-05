@@ -24,13 +24,17 @@ export function createVenue(name, password, leftRows, leftCols, centerRows, cent
     post('/venue/create', data, handler)
 }
 
-export function createShow(venueName, password, title, startTime, endTime, usesBlocks){
+export function createShow(venueName, password, title, startTime, endTime, usesBlocks, optPrice){
+    if (optPrice == "") {
+        optPrice = null
+    }
     let data = {  "venueName": venueName,
                   "password" : password,
                   "title" : title,
                   "startTime" : startTime,
                   "endTime" : endTime,
-                  "usesBlocks" : usesBlocks}
+                  "usesBlocks" : usesBlocks,
+                  "optPrice" : optPrice}
 
     const handler = (json) => {
         console.log(json)
@@ -105,6 +109,34 @@ export function activateShow(name, password, title, startTime) {
 
     post('/show/activate', data, handler)
 
+}
+
+export function listBlocks(name, password, startTime) {
+    let data = { "name": name,
+                 "password" : password,
+                "startTime" : startTime}
+
+    const handler = (json) => {
+        console.log(json)
+        if(json.statusCode == 200){
+            let blocks = "<table style='width: 80%'> <tr><th>BlockID</th> <th>price</th> <th>section</th> <th>startRow</th> <th>endRow</th> <th>showID</th></tr>"
+            for(let b of json.success){
+                blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID +  "</tr>"
+            }
+            blocks += "</table>"
+            
+            if(json.success.length == 0) {
+                document.getElementById("blocksList").innerHTML = "No blocks currently exist for this show"
+            } else {
+                document.getElementById("blocksList").innerHTML = blocks
+            }
+        }
+        else{
+            document.getElementById("blocksList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
+        }
+    }
+
+    post('/show/listBlocks', data, handler)
 }
 
 export function listShows(name, password) {
@@ -268,6 +300,8 @@ export function searchShows(title) {
         if(json.statusCode == 200) {
             let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th>"
             for(let s of json.success) {
+                s.startTime = s.startTime.replace(/T/g, " ")
+                s.startTime = s.startTime.replace(/Z/g, " ")
                 shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td></tr>"
             }
             shows += "</table>"
@@ -275,9 +309,6 @@ export function searchShows(title) {
             if(json.success.length == 0) {
                 document.getElementById("searchShowsList").innerHTML = "No shows match your search"
             } else {
-                //Fixing the formating , getting rid of those weird T and Z characters
-                shows = shows.replace(/T/g, " ")
-                shows = shows.replace(/Z/g, " ")
                 document.getElementById("searchShowsList").innerHTML = shows
             }
 
