@@ -281,8 +281,8 @@ export function searchShows(title) {
                 document.getElementById("searchShowsList").innerHTML = "No shows match your search"
             } else {
                 //Fixing the formating , getting rid of those weird T and Z characters
-                shows = shows.replace(/T/g, " ")
-                shows = shows.replace(/Z/g, " ")
+                show.startTime = show.startTime.replace(/T/g, " ")
+                show.startTime = show.startTime.replace(/Z/g, " ")
                 document.getElementById("searchShowsList").innerHTML = shows
             }
 
