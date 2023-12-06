@@ -335,19 +335,29 @@ export function showAvailableSeats(name, startTime) {
         console.log(name)
         console.log(startTime)
         if(json.statusCode == 200) {
-            let seats = "row, column, section <br>"
+            let blocks = []
             for(let s of json.success) {
-                seats += s.row + ' ' + s.column + ' ' + s.section + '<br>'
+                if(s.block != null && !blocks.some(row => row.includes(s.block))){
+                    let price = 0
+                    for(let b of json.blocks){
+                        if(b.blockID == s.block){
+                            price = b.price
+                        }
+                    }
+                    let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+                    blocks.push([s.block, randomColor, price])
+                }
             }
 
-            let prevCol = "1";
+            let prevRow = "A";
             let prevSection = "leftSection";
             let display = "leftSection" + "<table> <tr><td> </td>"
 
             for(let i = 0; i < json.venue.leftRows; i++){
-                display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
+                display += "<th>" + (i+1) + "</th>"
             }
-            display += "</tr><tr><th>1</th>"
+
+            display += "<tr> <th>A</th>"
 
             for(let seat of json.success){
                 if(seat.section != prevSection){
@@ -356,25 +366,34 @@ export function showAvailableSeats(name, startTime) {
 
                     if(seat.section == "centerSection"){
                         for(let i = 0; i < json.venue.centerRows; i++){
-                            display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
+                            display += "<th>" + (i+1) + "</th>"
                         }
                     }
                     else if(seat.section == "rightSection"){
                         for(let i = 0; i < json.venue.rightRows; i++){
-                            display += "<th>" + String.fromCharCode(i + 0x41) + "</th>"
+                            display += "<th>" + (i+1) + "</th>"
                         }
                     }
 
                     display += "</tr><tr>"
                 }
 
-                if(seat.column != prevCol){
-                    prevCol = seat.column
-                    display += "</tr><tr><th>" + seat.column + "</th>"
+                if(seat.row != prevRow){
+                    prevRow = seat.row
+                    display += "</tr><tr><th>" + seat.row + "</th>"
                 }
 
                 if(seat.isAvailable){
-                    display += "<td>x</td>"
+                    let hasBlock = false;
+                    for(let i = 0; i < blocks.length; i++){
+                        if(seat.block == blocks[i][0]){
+                            display += "<td style='color:" + blocks[i][1] + ";'>x</td>"
+                            hasBlock = true;
+                        }
+                    }
+                    if(!hasBlock){
+                        display += "<td>x</td>"
+                    }
                 }
                 else{
                     display += "<td> </td>"
@@ -382,6 +401,14 @@ export function showAvailableSeats(name, startTime) {
             }
 
             display += "</tr></table>"
+
+            for(let i = 0; i < blocks.length; i++){
+                display += "<p style='color:" + blocks[i][1] + ";'> block " + i + ": " + blocks[i][2] +"$</br></p>"
+            }
+
+            if(blocks.length == 0){
+                display += "price: " + json.show.optPrice + "$"
+            }
 
 //            console.log(seats)
 //            console.log(display)
