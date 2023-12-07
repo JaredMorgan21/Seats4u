@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEATS4U!</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            margin-top: 15px;
+        }
+
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .section {
+            flex: 1;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .toggle-dark-mode {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .toggle-dark-mode:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            margin-bottom: -10px; /* Added margin to shift the text down */
+        }
+
+    </style>
+
+</head>
+<body>
+<h1>Welcome to Seats4U!</h1>
+<div class="container">
+    <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <div class=section>
+        <div class="button-container">
+            <button onclick="redirectToWebpageAdmin()">Go to Admin</button>
+            <button onclick="redirectToWebpageVenueManager()">Go to VenueManager</button>
+            <button onclick="redirectToWebpageConsumer()">Go to Consumer</button>
+            <button onclick="redirectToWebpageDance()">Go to Dance Party</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function redirectToWebpageAdmin() {
+        window.location.href = "https://seats4uhome.s3.us-east-2.amazonaws.com/admin.html";
+    }
+
+    function redirectToWebpageVenueManager() {
+        window.location.href = "https://seats4uhome.s3.us-east-2.amazonaws.com/VenueManager.html";
+    }
+
+    function redirectToWebpageConsumer() {
+        window.location.href = "https://seats4uhome.s3.us-east-2.amazonaws.com/consumer.html";
+    }
+
+    function redirectToWebpageDance() {
+        window.location.href = "https://seats4uhome.s3.us-east-2.amazonaws.com/DancePart.html";
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>
+</body>
+</html>

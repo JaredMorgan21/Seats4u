@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>VenueManager</title>
+
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result,
+        #resultShow,
+        #venueDeleteResult,
+        #showDeleteResultVM,
+        #showActivateResult,
+        #showsList,
+        #createBlockResult,
+        #showsReportVM {
+            margin-top: 15px;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .increment-decrement {
+            display: flex;
+            align-items: center;
+        }
+
+        .increment-decrement button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .increment-decrement button:hover {
+            background-color: #45a049;
+        }
+
+        .section {
+            flex: 1;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .large-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        h1 {text-align: center;}
+
+    </style>
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+    function createVenue(name, password, leftRows, leftCols, centerRows, centerCols, rightRows, rightCols) {
+        let data = {
+            "name": name,
+            "password": password,
+            "leftRows": leftRows,
+            "leftCols": leftCols,
+            "centerRows": centerRows,
+            "centerCols": centerCols,
+            "rightRows": rightRows,
+            "rightCols": rightCols
+        }
+
+        const handler = (json) => {
+            console.log(json)
+            if (json.statusCode == 200) {
+                document.getElementById("result").innerHTML = "Venue created with name \'" + json.success + "\'"
+            } else {
+                document.getElementById("result").innerHTML = "Error: " + json.error
+            }
+        }
+
+        post('/venue/create', data, handler)
+    }
+
+
+    function createShow(venueName, password, title, startTime, endTime, usesBlocks, optPrice){
+        if (optPrice == "") {
+            optPrice = null
+        }
+        let data = {  "venueName": venueName,
+            "password" : password,
+            "title" : title,
+            "startTime" : startTime,
+            "endTime" : endTime,
+            "usesBlocks" : usesBlocks,
+            "optPrice" : optPrice}
+
+        const handler = (json) => {
+            console.log(json)
+            if(json.statusCode == 200){
+                document.getElementById("resultShow").innerHTML = "Show created with name \'" + json.success + "\'"
+            }
+            else{
+                document.getElementById("resultShow").innerHTML = "Error: " + json.error
+            }
+        }
+
+        post('/show/create', data, handler)
+    }
+
+    function activateShow(name, password, title, startTime) {
+        let data = {
+            "name": name,
+            "password" : password,
+            "title" : title,
+            "startTime" : startTime}
+
+        const handler = (json) => {
+            console.log(json)
+            if(json.statusCode == 200) {
+                document.getElementById("showActivateResult").innerHTML = "Show with name \'" + json.success + "\'" + " is now active"
+            } else {
+                document.getElementById("showActivateResult").innerHTML = "Error: " + json.error
+            }
+        }
+
+        post('/show/activate', data, handler)
+
+    }
+
+
+    function listShows(name, password) {
+        let data = { "name": name,
+            "password" : password}
+
+        const handler = (json) => {
+            if(json.statusCode == 200){
+                let shows = "<table style='width: 80%'> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
+                for(let s of json.success){
+                    s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
+                    s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
+                    shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue + "</tr>"
+                }
+                shows += "</table>"
+
+                if(json.success.length == 0) {
+                    document.getElementById("showsList").innerHTML = "No shows currently exist for this venue"
+                } else {
+                    document.getElementById("showsList").innerHTML = shows
+                }
+            }
+            else{
+                document.getElementById("showsList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
+            }
+        }
+
+        post('/venue/listShows', data, handler)
+    }
+
+    function deleteShow(name, password, title, startTime) {
+        let data = {
+            "name": name,
+            "password": password,
+            "title": title,
+            "startTime": startTime
+        };
+
+        const handler = (json) => {
+            console.log(json);
+            if (json.statusCode == 200) {
+                document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
+            } else {
+                document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists (or other error)"
+            }
+        }
+
+        post('/show/deleteVM', data, handler)
+
+    }
+
+    function deleteVenue(name, venuePass) {
+        let data = {
+            "name": name,
+            "password": venuePass
+        };
+        const handler = (json) => {
+            console.log(json);
+            if (json.statusCode == 200) {
+                document.getElementById("venueDeleteResult").innerHTML = "Venue deleted with name \'" + json.success + "\'"
+            } else {
+                document.getElementById("venueDeleteResult").innerHTML = "No venue with that name exists (or other error)"
+            }
+        }
+
+        post('/venue/delete', data, handler)
+    }
+
+    function createBlock(name, password, startTime, section, startRow, endRow, price) {
+        let data = {  "venueName": name,
+            "password" : password,
+            "startTime" : startTime,
+            "section" : section,
+            "startRow" : startRow,
+            "endRow" : endRow,
+            "price" : price}
+
+        const handler = (json) => {
+            console.log(json)
+            if(json.statusCode == 200){
+                document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: \'" + json.success + "\'" //TODO
+            }
+            else{
+                document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
+            }
+        }
+
+        post('/show/createBlock', data, handler)
+    }
+
+    function generateReportVM(name, password) {
+        let data = {
+            "name": name,
+            "venueCredentials": password
+        }
+
+        const handler = (json) => {
+            console.log(json)
+            if (json.statusCode == 200) {
+                document.getElementById("showsReportVM").innerHTML = json.success
+            } else {
+                document.getElementById("showsReportVM").innerHTML = "Error: " + json.error
+            }
+        }
+
+        post('/show/generateReportVM', data, handler)
+
+    }
+
+    const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/";
+
+    function api(resource) {
+        return url + resource
+    }
+
+    function post(resource, data, handler) {
+        fetch(api(resource), {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then((response) => response.json())
+            .then((responseJson) => handler(responseJson))
+            .catch((err) => handler(err))
+    }
+
+    async function get(resource) {
+        const response = await fetch(api(resource), {
+            method: "GET"
+        })
+
+        return response.json()
+    }
+
+
+    function toggleDarkMode() {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+    }
+
+</script>
+
+<div class="container">
+    <h1>Venue Manager</h1>
+    <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+    <div class="section">
+
+
+        <div class="large-text">Create Venue</div>
+
+        name: <input id="venueName"/><br/>
+        password: <input id="venuePassword" type="password"/><br/>
+
+        <table>
+            <tr>
+                <th>Section</th>
+                <th>Rows</th>
+                <th>Columns</th>
+            </tr>
+            <tr>
+                <th>Left</th>
+                <td><input id="leftRows" type="number"></td>
+                <td><input id="leftColumns" type="number"></td>
+            </tr>
+            <tr>
+                <th>Center</th>
+                <td><input id="centerRows" type="number"></td>
+                <td><input id="centerColumns" type="number"></td>
+            </tr>
+            <tr>
+                <th>Right</th>
+                <td><input id="rightRows" type="number"></td>
+                <td><input id="rightColumns" type="number"></td>
+            </tr>
+        </table>
+
+
+        <button onclick="createVenue(document.getElementById('venueName').value,
+        document.getElementById('venuePassword').value,
+        document.getElementById('leftRows').value,
+        document.getElementById('leftColumns').value,
+        document.getElementById('centerRows').value,
+        document.getElementById('centerColumns').value,
+        document.getElementById('rightRows').value,
+        document.getElementById('rightColumns').value)">Create Venue
+        </button>
+        <br/>
+        <p id="result" readOnly></p>
+
+
+    </div>
+    <div class=section>
+        <div class="large-text">Create Show</div>
+        venue name: <input id="venueNameCreateShow"/><br/>
+        venue password: <input id="venuePasswordCreateShow" type="password"/><br/>
+        show title: <input id="showTitle"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTime"/><br/>
+        end date/time 'YYYY-MM-DD hh:mm:ss': <input id="showEndTime"/><br/>
+        uses blocks? 'Boolean 0 or 1': <input id="usesBlocks"/><br/>
+        optPrice (if not using blocks, enter universal seat price. DO NOT enter anything if using blocks): <input
+            id="optPrice"/><br/>
+
+        <button onclick="createShow(document.getElementById('venueNameCreateShow').value,
+document.getElementById('venuePasswordCreateShow').value,
+document.getElementById('showTitle').value,
+document.getElementById('showStartTime').value,
+document.getElementById('showEndTime').value,
+document.getElementById('usesBlocks').value,
+document.getElementById('optPrice').value
+)">Create Show
+        </button>
+        <br/>
+        <p id="resultShow" readOnly></p>
+    </div>
+
+
+    <div class=section>
+        <div class="large-text">Delete Venue</div>
+        venue name: <input id="venueNameDelete"/><br/>
+        venue password: <input id="venuePasswordDelete" type="password"/><br/>
+        <button onclick="deleteVenue(document.getElementById('venueNameDelete').value, document.getElementById('venuePasswordDelete').value)">
+            Delete venue
+        </button>
+        <p id="venueDeleteResult"></p>
+    </div>
+
+    <div class=section>
+        <div class="large-text">Delete Show</div>
+        venue name: <input id="venueNameDeleteShowVM"/><br/>
+        venue password: <input id="venuePasswordDeleteShowVM" type="password"/><br/>
+        show title: <input id="showTitleDeleteShowVM"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTimeDeleteShowVM"/><br/>
+        <button onclick="deleteShow(document.getElementById('venueNameDeleteShowVM').value,
+        document.getElementById('venuePasswordDeleteShowVM').value,
+        document.getElementById('showTitleDeleteShowVM').value,
+        document.getElementById('showStartTimeDeleteShowVM').value)">Delete Show
+        </button>
+        <p id="showDeleteResultVM"></p>
+
+    </div>
+
+    <div class=section>
+        <div class="large-text">Activate Show</div>
+        venue name: <input id="venueNameActivateShow"/><br/>
+        venue password: <input id="venuePasswordActivateShow" type="password"/><br/>
+        show title: <input id="showTitleActivateShow"/><br/>
+        start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTimeActivateShow"/><br/>
+        <button onclick="activateShow(document.getElementById('venueNameActivateShow').value,
+        document.getElementById('venuePasswordActivateShow').value,
+        document.getElementById('showTitleActivateShow').value,
+        document.getElementById('showStartTimeActivateShow').value)">Activate Show
+        </button>
+        <p id="showActivateResult"></p>
+    </div>
+
+    <div class=section>
+        <div class="large-text">List Shows</div>
+        venue name: <input id="venueNameListShows"/><br/>
+        venue password: <input id="venuePasswordListShows" type="password"/><br/>
+        <button onclick="listShows(document.getElementById('venueNameListShows').value,
+        document.getElementById('venuePasswordListShows').value)">List Shows
+        </button>
+        <p id="showsList"></p>
+    </div>
+
+    <div class=section>
+
+        <div class="large-text">Create Block</div>
+        venue name: <input id="venueNameCreateBlock"/><br/>
+        venue password: <input id="venuePasswordCreateBlock" type="password"/><br/>
+        show start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTimeCreateBlock"/><br/>
+        section 'leftSection, centerSection, or rightSection': <input id="sectionCreateBlock"/><br/>
+        start row: <input id="startRowCreateBlock"/><br/>
+        end row: <input id="endRowCreateBlock"/><br/>
+        price: <input id="priceCreateBlock"/><br/>
+        <button onclick="createBlock(document.getElementById('venueNameCreateBlock').value,
+document.getElementById('venuePasswordCreateBlock').value,
+document.getElementById('showStartTimeCreateBlock').value,
+document.getElementById('sectionCreateBlock').value,
+document.getElementById('startRowCreateBlock').value,
+document.getElementById('endRowCreateBlock').value,
+document.getElementById('priceCreateBlock').value)">Create Block
+        </button>
+        <p id="createBlockResult"></p>
+    </div>
+
+    <div class=section>
+
+        <div class="large-text">Show Report</div>
+        venue name: <input id="venueNameShowsReportVM"/><br/>
+        venue password: <input id="venuePasswordShowsReportVM" type="password"/><br/>
+        <button onclick="generateReportVM(document.getElementById('venueNameShowsReportVM').value,
+document.getElementById('venuePasswordShowsReportVM').value)">Venue Manager Shows Report
+        </button>
+        <p id="showsReportVM"></p>
+    </div>
+</div>
+</body>
+
+</html>
