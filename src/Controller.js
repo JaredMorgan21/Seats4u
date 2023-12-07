@@ -405,7 +405,7 @@ export function showAvailableSeats(name, startTime) {
             display += "</tr></table>"
 
             for(let i = 0; i < blocks.length; i++){
-                display += "<p style='color:" + blocks[i][1] + ";'> block " + (i+1) + ": " + blocks[i][2] +"$</br></p>"
+                display += "<p style='color:" + blocks[i][1] + ";'> block " + (i+1) + ": $" + blocks[i][2] +"</br></p>"
             }
 
             if(blocks.length == 0){
