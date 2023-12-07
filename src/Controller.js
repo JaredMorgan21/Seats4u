@@ -237,7 +237,7 @@ export function listVenues(adminPass){
                 for(let s of json.shows) {
                     for(let show of s) {
                         if (show.venueName === v.venueName) { //could probably optimize
-                            show.startTime = show.startTime.replace(/T/g, " ")
+                            show.startTime = show.startTime.replace(/T/g, " ").replace(/Z/g, " ")
                             show.startTime = show.startTime.replace(".000"," ")
                             result += "<tr> <td  style='text-align: center'>-----</td> <td  style='text-align: center'>" + show.title + "</td><td  style='text-align: center'>" + show.startTime + "</td></tr>"
                         }
@@ -302,7 +302,7 @@ export function searchShows(title) {
         if(json.statusCode == 200) {
             let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th>"
             for(let s of json.success) {
-                s.startTime = s.startTime.replace(/T/g, " ")
+                s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
                 s.startTime = s.startTime.replace(".000"," ")
                 shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td></tr>"
             }
