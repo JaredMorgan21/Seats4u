@@ -344,7 +344,7 @@ export function showAvailableSeats(name, startTime) {
                             price = b.price
                         }
                     }
-                    let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+                    let randomColor = "hsl(" + Math.random() * 360 + "," + (Math.random() * 40 + 60) + "%," + (Math.random() * 50 + 30) + "%)";
                     blocks.push([s.block, randomColor, price])
                 }
             }
