@@ -83,7 +83,7 @@ export function deleteBlock(name, password, startTime, section, startRow, endRow
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200){
-            document.getElementById("deleteBlockResult").innerHTML = "The following blocks have been deleted: \'" + json.success + "\'" //TODO 
+            document.getElementById("deleteBlockResult").innerHTML = "The following block have been deleted: \'" + json.success + "\'" //TODO 
         }
         else{
             document.getElementById("deleteBlockResult").innerHTML = "Error: " + json.error
@@ -407,7 +407,7 @@ export function showAvailableSeats(name, startTime) {
             }
 
             if(blocks.length == 0){
-                display += "price: " + json.show.optPrice + "$"
+                display += "price: " + "$" + json.show.optPrice 
             }
 
 //            console.log(seats)
