@@ -407,7 +407,7 @@ export function showAvailableSeats(name, startTime) {
             }
 
             if(blocks.length == 0){
-                display += "price: " + json.show.optPrice + "$"
+                display += "price: " + "$" + json.show.optPrice 
             }
 
 //            console.log(seats)
