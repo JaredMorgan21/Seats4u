@@ -238,7 +238,7 @@ export function listVenues(adminPass){
                     for(let show of s) {
                         if (show.venueName === v.venueName) { //could probably optimize
                             show.startTime = show.startTime.replace(/T/g, " ")
-                            s.startTime = s.startTime.replace(".000"," ")
+                            show.startTime = show.startTime.replace(".000"," ")
                             result += "<tr> <td  style='text-align: center'>-----</td> <td  style='text-align: center'>" + show.title + "</td><td  style='text-align: center'>" + show.startTime + "</td></tr>"
                         }
                     }
