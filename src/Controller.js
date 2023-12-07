@@ -148,7 +148,9 @@ export function listShows(name, password) {
             let shows = "<table style='width: 80%'> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
             for(let s of json.success){
                 s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
+                s.startTime = s.startTime.replace(".000"," ")
                 s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
+                s.endTime = s.endTime.replace(".000"," ")
                 shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue + "</tr>"
             }
             shows += "</table>"
@@ -236,7 +238,7 @@ export function listVenues(adminPass){
                     for(let show of s) {
                         if (show.venueName === v.venueName) { //could probably optimize
                             show.startTime = show.startTime.replace(/T/g, " ")
-                            show.startTime = show.startTime.replace(/Z/g, " ")
+                            s.startTime = s.startTime.replace(".000"," ")
                             result += "<tr> <td  style='text-align: center'>-----</td> <td  style='text-align: center'>" + show.title + "</td><td  style='text-align: center'>" + show.startTime + "</td></tr>"
                         }
                     }
@@ -301,7 +303,7 @@ export function searchShows(title) {
             let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th>"
             for(let s of json.success) {
                 s.startTime = s.startTime.replace(/T/g, " ")
-                s.startTime = s.startTime.replace(/Z/g, " ")
+                s.startTime = s.startTime.replace(".000"," ")
                 shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td></tr>"
             }
             shows += "</table>"
