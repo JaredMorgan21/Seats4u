@@ -353,7 +353,7 @@ export function showAvailableSeats(name, startTime) {
             let prevSection = "leftSection";
             let display = "leftSection" + "<table> <tr><td> </td>"
 
-            for(let i = 0; i < json.venue.leftRows; i++){
+            for(let i = 0; i < json.venue.leftColumns; i++){
                 display += "<th>" + (i+1) + "</th>"
             }
 
@@ -365,12 +365,12 @@ export function showAvailableSeats(name, startTime) {
                     display += "</table> " + seat.section + "<table> <tr><td> </td>"
 
                     if(seat.section == "centerSection"){
-                        for(let i = 0; i < json.venue.centerRows; i++){
+                        for(let i = 0; i < json.venue.centerColumns; i++){
                             display += "<th>" + (i+1) + "</th>"
                         }
                     }
                     else if(seat.section == "rightSection"){
-                        for(let i = 0; i < json.venue.rightRows; i++){
+                        for(let i = 0; i < json.venue.rightColumns; i++){
                             display += "<th>" + (i+1) + "</th>"
                         }
                     }
@@ -403,7 +403,7 @@ export function showAvailableSeats(name, startTime) {
             display += "</tr></table>"
 
             for(let i = 0; i < blocks.length; i++){
-                display += "<p style='color:" + blocks[i][1] + ";'> block " + i + ": " + blocks[i][2] +"$</br></p>"
+                display += "<p style='color:" + blocks[i][1] + ";'> block " + (i+1) + ": " + blocks[i][2] +"$</br></p>"
             }
 
             if(blocks.length == 0){
