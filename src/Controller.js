@@ -61,7 +61,7 @@ export function createBlock(name, password, startTime, section, startRow, endRow
     const handler = (json) => {
         console.log(json)
         if(json.statusCode == 200){
-            document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: \'" + json.success + "\'" //TODO 
+            document.getElementById("createBlockResult").innerHTML = "The following block have been created: \'" + json.success + "\'" //TODO 
         }
         else{
             document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
