@@ -151,7 +151,7 @@ export function listShows(name, password) {
                 s.startTime = s.startTime.replace(".000"," ")
                 s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
                 s.endTime = s.endTime.replace(".000"," ")
-                shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue + "</tr>"
+                shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue +"</td><td><button onclick='redirectToShowPage()'>Go to show</button></td></tr>"
             }
             shows += "</table>"
             

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            margin-top: 15px;
+        }
+
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        .section {
+            flex: 1;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .toggle-dark-mode {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .toggle-dark-mode:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            margin-bottom: -10px; /* Added margin to shift the text down */
+        }
+
+    </style>
+  <div class="container">
+    <h1>Venue Manager Login</h1>
+    <div class="container">
+      Venue Name: <input id="venueName"/><br/>
+      Venue Password: <input id="venuePassword" type="password"/><br/>
+      <div class="button-container">
+        <button onclick="redirectToWebpageVenueManager()">Submit</button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="container">
+    <h1>Create Venue</h1>
+    <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+    <div class="section">
+      name: <input id="createVenueName"/><br/>
+      password: <input id="createVenuePassword" type="password"/><br/>
+
+      <table>
+        <tr>
+          <th>Section</th>
+          <th>Rows</th>
+          <th>Columns</th>
+        </tr>
+        <tr>
+          <th>Left</th>
+          <td><input id="leftRows" type="number"></td>
+          <td><input id="leftColumns" type="number"></td>
+        </tr>
+        <tr>
+          <th>Center</th>
+          <td><input id="centerRows" type="number"></td>
+          <td><input id="centerColumns" type="number"></td>
+        </tr>
+        <tr>
+          <th>Right</th>
+          <td><input id="rightRows" type="number"></td>
+          <td><input id="rightColumns" type="number"></td>
+        </tr>
+      </table>
+
+      <div class="button-container">
+        <button onclick="createVenue(document.getElementById('createVenueName').value,
+          document.getElementById('createVenuePassword').value,
+          document.getElementById('leftRows').value,
+          document.getElementById('leftColumns').value,
+          document.getElementById('centerRows').value,
+          document.getElementById('centerColumns').value,
+          document.getElementById('rightRows').value,
+          document.getElementById('rightColumns').value)">Create Venue
+        </button>
+      </div>
+      <br/>
+      <p id="result" readOnly></p>
+    </div>
+  </div>
+</html>
+
+<script>
+  function redirectToWebpageVenueManager() {
+      window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/VenueManager.html?venueName=" + document.getElementById('venueName').value + "&password=" + document.getElementById('venuePassword').value;
+  }
+
+  function createVenue(name, password, leftRows, leftCols, centerRows, centerCols, rightRows, rightCols) {
+      let data = {
+          "name": name,
+          "password": password,
+          "leftRows": leftRows,
+          "leftCols": leftCols,
+          "centerRows": centerRows,
+          "centerCols": centerCols,
+          "rightRows": rightRows,
+          "rightCols": rightCols
+      }
+
+      const handler = (json) => {
+          console.log(json)
+          if (json.statusCode == 200) {
+              document.getElementById("result").innerHTML = "Venue created with name \'" + json.success + "\'"
+          } else {
+              document.getElementById("result").innerHTML = "Error: " + json.error
+          }
+      }
+
+      post('/venue/create', data, handler)
+  }
+
+  const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/";
+
+  function api(resource) {
+      return url + resource
+  }
+
+  function post(resource, data, handler) {
+    fetch(api(resource), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+        .then((response) => response.json())
+        .then((responseJson) => handler(responseJson))
+        .catch((err) => handler(err))
+  }
+</script>
