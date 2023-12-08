@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEATS4U!</title>
-
-    <style>
+  <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
@@ -89,43 +84,20 @@
         }
 
     </style>
+  <div class="container">
+    <h1>Admin Login</h1>
+    <div class="container">
+      Admin Password: <input id="adminPassword" type="password"/><br/>
+      <div class="button-container">
+        <button onclick="redirectToWebpageAdmin()">Submit</button>
+      </div>
 
-</head>
-<body>
-<h1>Welcome to Seats4U!</h1>
-<div class="container">
-    <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-    <div class=section>
-        <div class="button-container">
-            <button onclick="redirectToWebpageAdmin()">Go to Admin</button>
-            <button onclick="redirectToWebpageVenueManager()">Go to VenueManager</button>
-            <button onclick="redirectToWebpageConsumer()">Go to Consumer</button>
-            <button onclick="redirectToWebpageDance()">Go to Dance Party</button>
-        </div>
     </div>
-</div>
-</div>
+  </div>
+</html>
 
 <script>
-    function redirectToWebpageAdmin() {
-        window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/AdminLogin.html";
-    }
-
-    function redirectToWebpageVenueManager() {
-        window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/VMLogin.html";
-    }
-
-    function redirectToWebpageConsumer() {
-        window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/consumer.html";
-    }
-
-    function redirectToWebpageDance() {
-        window.location.href = "https://seats4uhome.s3.us-east-2.amazonaws.com/DancePart.html";
-    }
-
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-    }
+  function redirectToWebpageAdmin() {
+      window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/admin.html?password=" + document.getElementById('adminPassword').value;
+  }
 </script>
-</body>
-</html>

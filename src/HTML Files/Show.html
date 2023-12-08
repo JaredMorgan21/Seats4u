@@ -117,7 +117,7 @@
     <body>
 
         <div class="container">
-            <h1>Show</h1>
+            <h1 id="title"></h1>
             <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
             <div class=section>
@@ -147,12 +147,12 @@
             </div>
         </div>
 
-        <script type="text/javascript">
+        <script language="Javascript">
             const params = new URLSearchParams(document.location.search);
-
+            document.getElementById("title").innerHTML = params.get("title");
             function activateShow() {
                 let data = {
-                    "name": params.get("venueName")
+                    "name": params.get("venueName"),
                     "password" : params.get("password"),
                     "title" : params.get("title"),
                     "startTime" : params.get("startTime")}
@@ -178,6 +178,7 @@
                 };
 
                 const handler = (json) => {
+                    console.log(data)
                     console.log(json);
                     if (json.statusCode == 200) {
                         document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
@@ -238,7 +239,7 @@
 
                 return response.json()
             }
-        
+
             function toggleDarkMode() {
                 const body = document.body;
                 body.classList.toggle('dark-mode');
