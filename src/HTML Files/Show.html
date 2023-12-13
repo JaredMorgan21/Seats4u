@@ -145,21 +145,9 @@
                 <div class="large-text">List Block</div>
                 <button onclick=" listBlocks()">List Blocks</button>
                 <p id="blocksList"></p>
-            </div>
-
-            <div class=section>
-                <div class="large-text">Delete Block</div>
-                section 'leftSection, centerSection, or rightSection': <input id = "sectionDeleteBlock"/><br/>
-                start row: <input id = "startRowDeleteBlock"/><br/>
-                end row: <input id = "endRowDeleteBlock"/><br/>
-                <button onclick= "deleteBlock(
-    document.getElementById('sectionDeleteBlock').value,
-    document.getElementById('startRowDeleteBlock').value,
-    document.getElementById('endRowDeleteBlock').value)">Delete Block</button>
                 <p id="deleteBlockResult"></p>
             </div>
-
-
+            
             <div class=section>
                 <div class="large-text">Delete Show</div>
                 <button onclick="deleteShow()">Delete Show</button>
@@ -239,7 +227,7 @@
                 return url + resource
             }
 
-            function deleteBlock(name, password, startTime, section, startRow, endRow) {
+            function deleteBlock(section, startRow, endRow) {
                 let data = {  "venueName": params.get("venueName"),
                     "password" : params.get("password"),
                     "startTime" : params.get("startTime"),
@@ -247,10 +235,12 @@
                     "startRow" : startRow,
                     "endRow" : endRow}
 
+                console.log(data)
+
                 const handler = (json) => {
                     console.log(json)
                     if(json.statusCode == 200){
-                        document.getElementById("deleteBlockResult").innerHTML = "The following block have been deleted: \'" + json.success + "\'" //TODO
+                        document.getElementById("deleteBlockResult").innerHTML = "The following blocks have been deleted: \'" + json.success + "\'" //TODO
                     }
                     else{
                         document.getElementById("deleteBlockResult").innerHTML = "Error: " + json.error
@@ -259,7 +249,7 @@
                 post('/show/deleteBlock', data, handler)
             }
             function listBlocks(name, password, startTime) {
-                let data = { "venueName": params.get("venueName"),
+                let data = { "name": params.get("venueName"),
                     "password" : params.get("password"),
                     "startTime" : params.get("startTime")}
 
@@ -268,7 +258,7 @@
                     if(json.statusCode == 200){
                         let blocks = "<table style='width: 80%'> <tr><th>BlockID</th> <th>price</th> <th>section</th> <th>startRow</th> <th>endRow</th> <th>showID</th></tr>"
                         for(let b of json.success){
-                            blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID +  "</tr>"
+                            blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID + "</td><td><button onclick='deleteBlock(&quot;" + b.section + "&quot;, &quot;" + b.startRow + "&quot;, &quot;" + b.endRow + "&quot;)'>Delete Block</button></td></tr>"
                         }
                         blocks += "</table>"
 
