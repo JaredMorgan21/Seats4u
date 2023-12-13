@@ -82,17 +82,38 @@
 <body>
 <script type="text/javascript">
 
+    function redirectToShowPage(venueName, startTime, title) {
+        console.log(startTime, title)
+        window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/ShowConsumer.html?venueName=" + venueName + "&startTime=" + startTime + "&title=" + title;
+    }
+
     function searchShows(title) {
         let data = {"title" : title}
         const handler = (json) => {
-            console.log(json.success)
+            console.log(json)
             if(json.statusCode == 200) {
-                let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th>"
+                let shows = "<table style='width: 80%'> <tr> <th>title</th> <th>venue</th> <th>date</th> <th>available seats</th>"
                 for(let s of json.success) {
+                    let v = ''
+                    for(let venue of json.venues){
+                        if(venue.venueName == s.venueName){
+                            v = venue;
+                            v.seats = v.leftColumns * v.leftRows + v.centerColumns * v.centerRows + v.rightColumns * v.rightRows;
+                            if(v.seats == s.ticketsSold){
+                                v.availableSeats = "SOLD OUT"
+                            }
+                            else{
+                                v.availableSeats = (v.seats - s.ticketsSold) + "/" + (v.seats)
+                            }
+                        }
+                    }
+                    console.log(v)
+
                     s.startTime = s.startTime.replace(/T/g, " ")
                     s.startTime = s.startTime.replace(".000"," ")
-                    shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td></tr>"
+                    shows += "<tr> <td style='text-align: center'>"+ s.title + "</td><td style='text-align: center'>" + s.venueName + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + v.availableSeats + "</td><td><button onclick='redirectToShowPage(&quot;" + s.venueName + "&quot;, &quot;" + s.startTime + "&quot;, &quot;" + s.title + "&quot;)'>Go to show</button></td></tr>"
                 }
+
                 shows += "</table>"
 
                 if(json.success.length == 0) {
@@ -101,159 +122,15 @@
                     document.getElementById("searchShowsList").innerHTML = shows
                 }
 
-
             } else {
                 document.getElementById("searchShowsList").innerHTML = "Error: " + json.error
             }
         }
-
         post('/show/search', data, handler) //this is where it talks to API?
-
-    }
-
-    function showAvailableSeats(name, startTime) {
-        let data = {"venueName" : name,
-            "startTime" : startTime}
-
-        const handler = (json) => {
-            console.log(json)
-            console.log(name)
-            console.log(startTime)
-            if(json.statusCode == 200) {
-                let blocks = []
-                for(let s of json.success) {
-                    if(s.block != null && !blocks.some(row => row.includes(s.block))){
-                        let price = 0
-                        for(let b of json.blocks){
-                            if(b.blockID == s.block){
-                                price = b.price
-                            }
-                        }
-                        let randomColor = "hsl(" + Math.random() * 360 + "," + (Math.random() * 40 + 60) + "%," + (Math.random() * 50 + 30) + "%)";
-                        blocks.push([s.block, randomColor, price])
-                    }
-                }
-
-                let prevRow = "A";
-                let prevSection = "leftSection";
-                let display = "leftSection" + "<table> <tr><td> </td>"
-
-                for(let i = 0; i < json.venue.leftColumns; i++){
-                    display += "<th>" + (i+1) + "</th>"
-                }
-
-                display += "<tr> <th>A</th>"
-
-                for(let seat of json.success){
-                    if(seat.section != prevSection){
-                        prevSection = seat.section
-                        display += "</table> " + seat.section + "<table> <tr><td> </td>"
-
-                        if(seat.section == "centerSection"){
-                            for(let i = 0; i < json.venue.centerColumns; i++){
-                                display += "<th>" + (i+1) + "</th>"
-                            }
-                        }
-                        else if(seat.section == "rightSection"){
-                            for(let i = 0; i < json.venue.rightColumns; i++){
-                                display += "<th>" + (i+1) + "</th>"
-                            }
-                        }
-
-                        display += "</tr><tr>"
-                    }
-
-                    if(seat.row != prevRow){
-                        prevRow = seat.row
-                        display += "</tr><tr><th>" + seat.row + "</th>"
-                    }
-
-                    if(seat.isAvailable){
-                        let hasBlock = false;
-                        for(let i = 0; i < blocks.length; i++){
-                            if(seat.block == blocks[i][0]){
-                                display += "<td style='color:" + blocks[i][1] + ";'>x</td>"
-                                hasBlock = true;
-                            }
-                        }
-                        if(!hasBlock){
-                            display += "<td>x</td>"
-                        }
-                    }
-                    else{
-                        display += "<td> </td>"
-                    }
-                }
-
-                display += "</tr></table>"
-
-                for(let i = 0; i < blocks.length; i++){
-                    display += "<p style='color:" + blocks[i][1] + ";'> block " + (i+1) + ": $" + blocks[i][2] +"</br></p>"
-                }
-
-                if(blocks.length == 0){
-                    display += "price: " + "$" + json.show.optPrice
-                }
-
-//            console.log(seats)
-//            console.log(display)
-
-                if(json.success.length == 0) {
-                    document.getElementById("showSeatsResult").innerHTML = "No available seats"
-                } else {
-                    document.getElementById("showSeatsResult").innerHTML = display
-                }
-
-            } else {
-                document.getElementById("showSeatsResult").innerHTML = "Error: " + json.error
-            }
-        }
-
-        post('show/showAvailableSeats', data, handler)
-
     }
 
     function listActiveShows() {
         searchShows("");
-    }
-
-    function purchaseSeats(name, startTime, title, seats) {
-        let arraySeats = seats.split(", ")
-        console.log(arraySeats)
-        let seatsForLambda = []
-        for (let element of arraySeats) {
-            let seperating = element.split(" ")
-            let dict = {
-                "column": seperating[0][0],
-                "row": seperating[0][1],
-                "section": seperating[1], //assuming user inputs everything correctly
-            }
-            seatsForLambda.push(dict)
-        }
-        console.log(seatsForLambda)
-
-        let data = {
-            "venue": name,
-            "startTime": startTime,
-            "title": title,
-            "seats": seatsForLambda
-        }
-
-        const handler = (json) => {
-            console.log(json)
-            if (json.statusCode == 200) {
-                let seats = "The following seats were purchased for " + title + ": <br>"
-                for (let s of json.success) {
-                    seats += s.column + s.row + ' ' + s.section + '<br>'
-                }
-                document.getElementById("purchaseSeatsResult").innerHTML = seats
-            } else {
-                document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
-            }
-        }
-
-        post('show/purchaseSeats', data, handler)
-
     }
 
     const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/"
@@ -302,34 +179,6 @@
         <p id="searchShowsList"></p>
     </div>
 
-    <!-- Show Seats Section -->
-    <div class="show-seats-section">
-        <div class="large-text">Show Seats</div>
-        Venue name: <input id="venueNameShowSeats"/><br/>
-        Show start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTimeShowSeats"/><br/>
-        <button onclick="showAvailableSeats(
-            document.getElementById('venueNameShowSeats').value,
-            document.getElementById('showStartTimeShowSeats').value)">Show Available Seats
-        </button>
-        <p id="showSeatsResult"></p>
-    </div>
-
-    <!-- Purchase Seats Section -->
-    <div class="purchase-seats-section">
-        <div class="large-text">Purchase Seats</div>
-        Venue name: <input id="venueNamePurchaseSeats"/><br/>
-        Show start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTimePurchaseSeats"/><br/>
-        Title: <input id="titlePurchaseSeats"/><br/>
-        Seats 'columnrow section, ...' (ex. 1B leftSection, 2C rightSection, 4G centerSection):
-        <input id="seatsPurchaseSeats"/><br/>
-        <button onclick="purchaseSeats(
-            document.getElementById('venueNamePurchaseSeats').value,
-            document.getElementById('showStartTimePurchaseSeats').value,
-            document.getElementById('titlePurchaseSeats').value,
-            document.getElementById('seatsPurchaseSeats').value)">Purchase Seats
-        </button>
-        <p id="purchaseSeatsResult"></p>
-    </div>
 </div>
 
 </body>

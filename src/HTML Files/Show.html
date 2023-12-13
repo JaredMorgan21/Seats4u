@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Show</title>
+
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f4;
+                margin: 20px;
+                transition: background-color 0.5s ease;
+            }
+
+            body.dark-mode {
+                background-color: #333;
+                color: #fff;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            #result,
+            #resultShow,
+            #venueDeleteResult,
+            #showDeleteResultVM,
+            #showActivateResult,
+            #showsList,
+            #createBlockResult,
+            #showsReportVM {
+                margin-top: 15px;
+            }
+
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .increment-decrement {
+                display: flex;
+                align-items: center;
+            }
+
+            .increment-decrement button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 5px;
+                cursor: pointer;
+            }
+
+            .increment-decrement button:hover {
+                background-color: #45a049;
+            }
+
+            .section {
+                flex: 1;
+                margin: 10px;
+                padding: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            .large-text {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            h1 {text-align: center;}
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="container">
+            <h1 id="title"></h1>
+            <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+            <div class=section>
+                <div class="large-text">Activate Show</div>
+                <button onclick="activateShow()">Activate Show</button>
+                <p id="showActivateResult"></p>
+            </div>
+
+            <div class=section>
+                <div class="large-text">Create Block</div>
+                section 'leftSection, centerSection, or rightSection': <input id="sectionCreateBlock"/><br/>
+                start row: <input id="startRowCreateBlock"/><br/>
+                end row: <input id="endRowCreateBlock"/><br/>
+                price: <input id="priceCreateBlock"/><br/>
+                <button onclick="createBlock(
+                    document.getElementById('sectionCreateBlock').value,
+                    document.getElementById('startRowCreateBlock').value,
+                    document.getElementById('endRowCreateBlock').value,
+                    document.getElementById('priceCreateBlock').value)">Create Block</button>
+                <p id="createBlockResult"></p>
+            </div>
+
+
+            <div class = section>
+                <div class="large-text">List Block</div>
+                <button onclick=" listBlocks()">List Blocks</button>
+                <p id="blocksList"></p>
+                <p id="deleteBlockResult"></p>
+            </div>
+
+            <div class=section>
+                <div class="large-text">Delete Show</div>
+                <button onclick="deleteShow()">Delete Show</button>
+                <p id="showDeleteResultVM"></p>
+            </div>
+        </div>
+
+        <script language="Javascript">
+            const params = new URLSearchParams(document.location.search);
+            document.getElementById("title").innerHTML = params.get("title");
+            function activateShow() {
+                let data = {
+                    "name": params.get("venueName"),
+                    "password" : params.get("password"),
+                    "title" : params.get("title"),
+                    "startTime" : params.get("startTime")}
+
+                const handler = (json) => {
+
+                    if(json.statusCode == 200) {
+                        document.getElementById("showActivateResult").innerHTML = "Show with name \'" + json.success + "\'" + " is now active"
+                    } else {
+                        document.getElementById("showActivateResult").innerHTML = "Error: " + json.error
+                    }
+                }
+
+                post('/show/activate', data, handler)
+            }
+
+            function deleteShow() {
+                let data = {
+                    "name": params.get("venueName"),
+                    "password": params.get("password"),
+                    "title": params.get("title"),
+                    "startTime": params.get("startTime")
+                };
+
+                const handler = (json) => {
+                    console.log(data)
+                    console.log(json);
+                    if (json.statusCode == 200) {
+                        document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
+                    } else {
+                        document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists (or other error)"
+                    }
+                }
+
+                post('/show/deleteVM', data, handler)
+
+            }
+
+            function createBlock(section, startRow, endRow, price) {
+                let data = {    "venueName": params.get("venueName"),
+                                "password" : params.get("password"),
+                                "startTime" : params.get("startTime"),
+                                "section" : section,
+                                "startRow" : startRow,
+                                "endRow" : endRow,
+                                "price" : price}
+
+                const handler = (json) => {
+                    console.log(json)
+                    if(json.statusCode == 200){
+                        document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: \'" + json.success + "\'" //TODO
+                    }
+                    else{
+                        document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
+                    }
+                }
+
+                post('/show/createBlock', data, handler)
+            }
+
+            const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/";
+
+            function api(resource) {
+                return url + resource
+            }
+
+            function deleteBlock(section, startRow, endRow) {
+                let data = {  "venueName": params.get("venueName"),
+                    "password" : params.get("password"),
+                    "startTime" : params.get("startTime"),
+                    "section" : section,
+                    "startRow" : startRow,
+                    "endRow" : endRow}
+
+                console.log(data)
+
+                const handler = (json) => {
+                    console.log(json)
+                    if(json.statusCode == 200){
+                        document.getElementById("deleteBlockResult").innerHTML = "The following blocks have been deleted: \'" + json.success + "\'" //TODO
+                    }
+                    else{
+                        document.getElementById("deleteBlockResult").innerHTML = "Error: " + json.error
+                    }
+                }
+                post('/show/deleteBlock', data, handler)
+            }
+            function listBlocks(name, password, startTime) {
+                let data = { "name": params.get("venueName"),
+                    "password" : params.get("password"),
+                    "startTime" : params.get("startTime")}
+
+                const handler = (json) => {
+                    console.log(json)
+                    if(json.statusCode == 200){
+                        let blocks = "<table style='width: 80%'> <tr><th>BlockID</th> <th>price</th> <th>section</th> <th>startRow</th> <th>endRow</th> <th>showID</th></tr>"
+                        for(let b of json.success){
+                            blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID + "</td><td><button onclick='deleteBlock(&quot;" + b.section + "&quot;, &quot;" + b.startRow + "&quot;, &quot;" + b.endRow + "&quot;)'>Delete Block</button></td></tr>"
+                        }
+                        blocks += "</table>"
+
+                        if(json.success.length == 0) {
+                            document.getElementById("blocksList").innerHTML = "No blocks currently exist for this show"
+                        } else {
+                            document.getElementById("blocksList").innerHTML = blocks
+                        }
+                    }
+                    else{
+                        document.getElementById("blocksList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
+                    }
+                }
+
+                post('/show/listBlocks', data, handler)
+            }
+
+
+
+            function post(resource, data, handler) {
+                fetch(api(resource), {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then((response) => response.json())
+                    .then((responseJson) => handler(responseJson))
+                    .catch((err) => handler(err))
+            }
+
+            async function get(resource) {
+                const response = await fetch(api(resource), {
+                    method: "GET"
+                })
+
+                return response.json()
+            }
+
+            function toggleDarkMode() {
+                const body = document.body;
+                body.classList.toggle('dark-mode');
+            }
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Show</title>
+
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f4f4f4;
+                margin: 20px;
+                transition: background-color 0.5s ease;
+            }
+
+            body.dark-mode {
+                background-color: #333;
+                color: #fff;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            #result,
+            #resultShow,
+            #venueDeleteResult,
+            #showDeleteResultVM,
+            #showActivateResult,
+            #showsList,
+            #createBlockResult,
+            #showsReportVM {
+                margin-top: 15px;
+            }
+
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .increment-decrement {
+                display: flex;
+                align-items: center;
+            }
+
+            .increment-decrement button {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 5px;
+                cursor: pointer;
+            }
+
+            .increment-decrement button:hover {
+                background-color: #45a049;
+            }
+
+            .section {
+                flex: 1;
+                margin: 10px;
+                padding: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            .large-text {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            h1 {text-align: center;}
+
+        </style>
+
+    </head>
+
+    <body>
+        <h1 id="title"></h1>
+        <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <!-- Show Seats Section -->
+        <div class="show-seats-section">
+            <div class="large-text">Show Seats</div>
+            <button onclick="showAvailableSeats()">Show Available Seats</button>
+            <p id="showSeatsResult"></p>
+        </div>
+
+        <!-- Purchase Seats Section -->
+        <div class="purchase-seats-section">
+            <div class="large-text">Purchase Seats</div>
+            Seats 'columnrow section, ...' (ex. 1B leftSection, 2C rightSection, 4G centerSection):
+            <button onclick="purchaseSeats()">Purchase Seats</button>
+            <p id="purchaseSeatsResult"></p>
+        </div>
+
+        <script language="Javascript">
+            const params = new URLSearchParams(document.location.search);
+            document.getElementById("title").innerHTML = params.get("title");
+
+            function showAvailableSeats() {
+                let data = {"venueName" : params.get("venueName"),
+                            "startTime" : params.get("startTime")}
+
+                const handler = (json) => {
+                    console.log(json)
+                    console.log(data)
+                    if(json.statusCode == 200) {
+                        let blocks = []
+                        for(let s of json.success) {
+                            if(s.block != null && !blocks.some(row => row.includes(s.block))){
+                                let price = 0
+                                for(let b of json.blocks){
+                                    if(b.blockID == s.block){
+                                        price = b.price
+                                    }
+                                }
+                                let randomColor = "hsl(" + Math.random() * 360 + "," + (Math.random() * 40 + 60) + "%," + (Math.random() * 50 + 30) + "%)";
+                                blocks.push([s.block, randomColor, price])
+                            }
+                        }
+
+                        let prevRow = "A";
+                        let prevSection = "leftSection";
+                        let display = "leftSection" + "<table> <tr><td> </td>"
+
+                        for(let i = 0; i < json.venue.leftColumns; i++){
+                            display += "<th>" + (i+1) + "</th>"
+                        }
+
+                        display += "<tr> <th>A</th>"
+
+                        for(let seat of json.success){
+                            if(seat.section != prevSection){
+                                prevSection = seat.section
+                                display += "</table> " + seat.section + "<table> <tr><td> </td>"
+
+                                if(seat.section == "centerSection"){
+                                    for(let i = 0; i < json.venue.centerColumns; i++){
+                                        display += "<th>" + (i+1) + "</th>"
+                                    }
+                                }
+                                else if(seat.section == "rightSection"){
+                                    for(let i = 0; i < json.venue.rightColumns; i++){
+                                        display += "<th>" + (i+1) + "</th>"
+                                    }
+                                }
+
+                                display += "</tr><tr>"
+                            }
+
+                            if(seat.row != prevRow){
+                                prevRow = seat.row
+                                display += "</tr><tr><th>" + seat.row + "</th>"
+                            }
+
+                            if(seat.isAvailable){
+                                let hasBlock = false;
+                                for(let i = 0; i < blocks.length; i++){
+                                    if(seat.block == blocks[i][0]){
+                                        display += "<td style='background-color:" + blocks[i][1] + ";'><input type='checkbox' class='seats' value='" + seat.column + seat.row + " " + seat.section + "'></input></td>"
+                                        hasBlock = true;
+                                    }
+                                }
+                                if(!hasBlock){
+                                    display += "<td><input type='checkbox' class='seats' value='" + seat.column + seat.row + " " + seat.section + "'></input></td>"
+                                }
+                            }
+                            else{
+                                display += "<td> </td>"
+                            }
+                        }
+
+                        display += "</tr></table>"
+
+                        for(let i = 0; i < blocks.length; i++){
+                            display += "<p style='color:" + blocks[i][1] + ";'> block " + (i+1) + ": $" + blocks[i][2] +"</br></p>"
+                        }
+
+                        if(blocks.length == 0){
+                            display += "price: " + "$" + json.show.optPrice
+                        }
+
+        //            console.log(seats)
+        //            console.log(display)
+
+                        if(json.success.length == 0) {
+                            document.getElementById("showSeatsResult").innerHTML = "No available seats"
+                        } else {
+                            document.getElementById("showSeatsResult").innerHTML = display
+                        }
+
+                    } else {
+                        document.getElementById("showSeatsResult").innerHTML = "Error: " + json.error
+                    }
+                }
+
+                post('show/showAvailableSeats', data, handler)
+
+            }
+
+            function purchaseSeats() {
+                let arraySeats = document.getElementsByClassName("seats")
+                console.log(arraySeats)
+                let seatsForLambda = []
+                for (let element of arraySeats) {
+                    if(element.checked){
+                        let input = element.value
+                        let dict = {
+                            "column": input.charAt(0),
+                            "row": input.charAt(1),
+                            "section": input.substring(3), //assuming user inputs everything correctly
+                        }
+                        seatsForLambda.push(dict)
+                    }
+                }
+                console.log(seatsForLambda)
+
+                let data = {
+                    "venue": params.get("venueName"),
+                    "startTime": params.get("startTime"),
+                    "title": params.get("title"),
+                    "seats": seatsForLambda
+                }
+
+                const handler = (json) => {
+                    console.log(data)
+                    console.log(json)
+                    if (json.statusCode == 200) {
+                        let seats = "The following seats were purchased for " + params.get("title") + ": <br>"
+                        for (let s of json.success) {
+                            seats += s.column + s.row + ' ' + s.section + '<br>'
+                        }
+                        document.getElementById("purchaseSeatsResult").innerHTML = seats
+                    } else {
+                        console.log(json.invalidSeats)
+                        if(json.invalidSeats){
+                            let returnStr = "The following seats could not be purchased: <br>"
+
+                            for(let s of json.invalidSeats) {
+                                returnStr += s.column + s.row + ' ' + s.section + '<br>'
+                            }
+
+                            document.getElementById("purchaseSeatsResult").innerHTML = returnStr
+                        }
+                        else{
+                            document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
+                        }
+                    }
+                    showAvailableSeats()
+                }
+
+                post('show/purchaseSeats', data, handler)
+
+            }
+
+            const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/";
+
+            function api(resource) {
+                return url + resource
+            }
+
+            function post(resource, data, handler) {
+                fetch(api(resource), {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then((response) => response.json())
+                    .then((responseJson) => handler(responseJson))
+                    .catch((err) => handler(err))
+            }
+
+            async function get(resource) {
+                const response = await fetch(api(resource), {
+                    method: "GET"
+                })
+
+                return response.json()
+            }
+
+            function toggleDarkMode() {
+                const body = document.body;
+                body.classList.toggle('dark-mode');
+            }
+        </script>
+    </body>
+
+</html>

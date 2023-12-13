@@ -68,10 +68,10 @@
 </head>
 <body>
 <script type="text/javascript">
+    const params = new URLSearchParams(document.location.search);
 
-
-    function listVenues(adminPass) {
-        let data = {"password": adminPass}
+    function listVenues() {
+        let data = {"password": params.get("password")}
         const handler = (json) => {
             console.log(json.success)
             if (json.statusCode == 200) {
@@ -102,9 +102,9 @@
         post('/venue/list', data, handler)
     }
 
-    function deleteShowAdmin(adminPass, name, title, startTime) {
+    function deleteShowAdmin(name, title, startTime) {
         let data = {
-            "password": adminPass,
+            "password": params.get("password"),
             "name": name,
             "title": title,
             "startTime": startTime
@@ -122,8 +122,8 @@
         post('/show/deleteAdmin', data, handler)
     }
 
-    function generateReportAdmin(adminPass) {
-        let data = {"password": adminPass}
+    function generateReportAdmin() {
+        let data = {"password": params.get("password")}
 
         const handler = (json) => {
             console.log(json)
@@ -178,18 +178,12 @@
     <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     <div class="section">
         <h2>List Venue</h2>
-
-        <label for="adminPass">Admin Password:</label>
-        <input id="adminPass" type="password">
-        <button onclick="listVenues(document.getElementById('adminPass').value)">List Venues</button>
+        <button onclick="listVenues()">List Venues</button>
         <p id="venuesList"></p>
     </div>
 
     <div class="section">
         <h2>Delete Show</h2>
-
-        <label for="adminPassDeleteShowA">Admin Password:</label>
-        <input id="adminPassDeleteShowA" type="password">
 
         <label for="venueNameDeleteShowA">Venue Name:</label>
         <input id="venueNameDeleteShowA" type="text">
@@ -201,7 +195,6 @@
         <input id="showStartTimeDeleteShowA" type="text">
 
         <button onclick="deleteShowAdmin(
-            document.getElementById('adminPassDeleteShowA').value,
             document.getElementById('venueNameDeleteShowA').value,
             document.getElementById('showTitleDeleteShowA').value,
             document.getElementById('showStartTimeDeleteShowA').value)">Admin Delete Show
@@ -212,11 +205,7 @@
 
     <div class="section">
         <h2>Show Report</h2>
-
-        <label for="adminPassShowsReport">Admin Password:</label>
-        <input id="adminPassShowsReport" type="password">
-
-        <button onclick="generateReportAdmin(document.getElementById('adminPassShowsReport').value)">Admin Shows
+        <button onclick="generateReportAdmin()">Admin Shows
             Report
         </button>
         <p id="adminShowsReport"></p>
