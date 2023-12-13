@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>VenueManager</title>
 
-
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -110,254 +109,251 @@
             margin-bottom: 10px;
         }
         h1 {text-align: center;}
-
     </style>
-
 </head>
 
 <body>
+    <script type="text/javascript">
+        const params = new URLSearchParams(document.location.search);
 
-<script type="text/javascript">
-    const params = new URLSearchParams(document.location.search);
-
-    function createShow(title, startTime, endTime, usesBlocks, optPrice){
-        if (optPrice == "") {
-            optPrice = null
-        }
-        let data = {  "venueName": params.get("venueName"),
-            "password" : params.get("password"),
-            "title" : title,
-            "startTime" : startTime,
-            "endTime" : endTime,
-            "usesBlocks" : usesBlocks,
-            "optPrice" : optPrice}
-
-        const handler = (json) => {
-            console.log(json)
-            if(json.statusCode == 200){
-                document.getElementById("resultShow").innerHTML = "Show created with name \'" + json.success + "\'"
+        function createShow(title, startTime, endTime, usesBlocks, optPrice){
+            if (optPrice == "") {
+                optPrice = null
             }
-            else{
-                document.getElementById("resultShow").innerHTML = "Error: " + json.error
-            }
-        }
+            let data = {  "venueName": params.get("venueName"),
+                "password" : params.get("password"),
+                "title" : title,
+                "startTime" : startTime,
+                "endTime" : endTime,
+                "usesBlocks" : usesBlocks,
+                "optPrice" : optPrice}
 
-        post('/show/create', data, handler)
-    }
-
-    function activateShow(name, password, title, startTime) {
-        let data = {
-            "name": name,
-            "password" : password,
-            "title" : title,
-            "startTime" : startTime}
-
-        const handler = (json) => {
-
-            if(json.statusCode == 200) {
-                document.getElementById("showActivateResult").innerHTML = "Show with name \'" + json.success + "\'" + " is now active"
-            } else {
-                document.getElementById("showActivateResult").innerHTML = "Error: " + json.error
-            }
-        }
-
-        post('/show/activate', data, handler)
-
-    }
-
-    function redirectToShowPage(startTime, title) {
-        console.log(startTime, title)
-        window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/Show.html?venueName=" + params.get("venueName") + "&password=" + params.get("password") + "&startTime=" + startTime + "&title=" + title;
-    }
-
-    function listShows() {
-        let data = {
-            "name": params.get("venueName"),
-            "password" : params.get("password"),}
-
-        const handler = (json) => {
-            if(json.statusCode == 200){
-                let shows = "<table style='width: 80%'> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
-                for(let s of json.success){
-                    start = s.startTime;
-                    s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
-                    s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
-                    shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue +"</td><td><button onclick='redirectToShowPage(&quot;" + start.toString() + "&quot;, &quot;" + s.title + "&quot;)'>Go to show</button></td></tr>"
+            const handler = (json) => {
+                console.log(json)
+                if(json.statusCode == 200){
+                    document.getElementById("resultShow").innerHTML = "Show created with name \'" + json.success + "\'"
                 }
-                shows += "</table>"
+                else{
+                    document.getElementById("resultShow").innerHTML = "Error: " + json.error
+                }
+            }
 
-                if(json.success.length == 0) {
-                    document.getElementById("showsList").innerHTML = "No shows currently exist for this venue"
+            post('/show/create', data, handler)
+        }
+
+        function activateShow(name, password, title, startTime) {
+            let data = {
+                "name": name,
+                "password" : password,
+                "title" : title,
+                "startTime" : startTime}
+
+            const handler = (json) => {
+
+                if(json.statusCode == 200) {
+                    document.getElementById("showActivateResult").innerHTML = "Show with name \'" + json.success + "\'" + " is now active"
                 } else {
-                    document.getElementById("showsList").innerHTML = shows
+                    document.getElementById("showActivateResult").innerHTML = "Error: " + json.error
                 }
             }
-            else{
-                document.getElementById("showsList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
-            }
+
+            post('/show/activate', data, handler)
+
         }
 
-        post('/venue/listShows', data, handler)
-    }
-
-    function deleteShow(name, password, title, startTime) {
-        let data = {
-            "name": name,
-            "password": password,
-            "title": title,
-            "startTime": startTime
-        };
-
-        const handler = (json) => {
-            console.log(json);
-            if (json.statusCode == 200) {
-                document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
-            } else {
-                document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists (or other error)"
-            }
+        function redirectToShowPage(startTime, title) {
+            console.log(startTime, title)
+            window.location.href = "C:/Users/jmmor/seats4u/src/HTML Files/Show.html?venueName=" + params.get("venueName") + "&password=" + params.get("password") + "&startTime=" + startTime + "&title=" + title;
         }
 
-        post('/show/deleteVM', data, handler)
+        function listShows() {
+            let data = {
+                "name": params.get("venueName"),
+                "password" : params.get("password"),}
 
-    }
+            const handler = (json) => {
+                if(json.statusCode == 200){
+                    let shows = "<table style='width: 80%'> <tr><th>Title</th> <th>isActive</th> <th>startTime</th> <th>endTime</th> <th>usesBlocks</th> <th>ticketsSold</th> <th>totalRevenue</th></tr>"
+                    for(let s of json.success){
+                        start = s.startTime;
+                        s.startTime = s.startTime.replace(/T/g, " ").replace(/Z/g, " ")
+                        s.endTime = s.endTime.replace(/T/g, " ").replace(/Z/g, " ")
+                        shows += "<tr> <td style='text-align: center'>" + s.title + "</td><td style='text-align: center'>" + s.isActive + "</td><td style='text-align: center'>" + s.startTime + "</td><td style='text-align: center'>" + s.endTime + "</td><td style='text-align: center'>" + (s.usesBlocks ? "true" : "false") + "</td><td style='text-align: center'>" + s.ticketsSold + "</td><td style='text-align: center'>" + s.totalRevenue +"</td><td><button onclick='redirectToShowPage(&quot;" + start.toString() + "&quot;, &quot;" + s.title + "&quot;)'>Go to show</button></td></tr>"
+                    }
+                    shows += "</table>"
 
-    function deleteVenue() {
-        let data = {
-            "name": params.get("venueName"),
-            "password" : params.get("password"),
-        };
-        const handler = (json) => {
-            console.log(json);
-            if (json.statusCode == 200) {
-                document.getElementById("venueDeleteResult").innerHTML = "Venue deleted with name \'" + json.success + "\'"
-            } else {
-                document.getElementById("venueDeleteResult").innerHTML = "No venue with that name exists (or other error)"
+                    if(json.success.length == 0) {
+                        document.getElementById("showsList").innerHTML = "No shows currently exist for this venue"
+                    } else {
+                        document.getElementById("showsList").innerHTML = shows
+                    }
+                }
+                else{
+                    document.getElementById("showsList").innerHTML = "Error: " + json.error //want this instead of writing the errors here?
+                }
             }
+
+            post('/venue/listShows', data, handler)
         }
 
-        post('/venue/delete', data, handler)
-    }
+        function deleteShow(name, password, title, startTime) {
+            let data = {
+                "name": name,
+                "password": password,
+                "title": title,
+                "startTime": startTime
+            };
 
-    function createBlock(name, password, startTime, section, startRow, endRow, price) {
-        let data = {  "venueName": name,
-            "password" : password,
-            "startTime" : startTime,
-            "section" : section,
-            "startRow" : startRow,
-            "endRow" : endRow,
-            "price" : price}
+            const handler = (json) => {
+                console.log(json);
+                if (json.statusCode == 200) {
+                    document.getElementById("showDeleteResultVM").innerHTML = "Show deleted with name \'" + json.success + "\'"
+                } else {
+                    document.getElementById("showDeleteResultVM").innerHTML = "No show with that name exists (or other error)"
+                }
+            }
 
-        const handler = (json) => {
-            console.log(json)
-            if(json.statusCode == 200){
-                document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: \'" + json.success + "\'" //TODO
-            }
-            else{
-                document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
-            }
+            post('/show/deleteVM', data, handler)
+
         }
 
-        post('/show/createBlock', data, handler)
-    }
-
-    function generateReportVM() {
-        let data = {
-            "name": params.get("venueName"),
-            "venueCredentials" : params.get("password"),
-        }
-
-        const handler = (json) => {
-            console.log(json)
-            if (json.statusCode == 200) {
-                document.getElementById("showsReportVM").innerHTML = json.success
-            } else {
-                document.getElementById("showsReportVM").innerHTML = "Error: " + json.error
+        function deleteVenue() {
+            let data = {
+                "name": params.get("venueName"),
+                "password" : params.get("password"),
+            };
+            const handler = (json) => {
+                console.log(json);
+                if (json.statusCode == 200) {
+                    document.getElementById("venueDeleteResult").innerHTML = "Venue deleted with name \'" + json.success + "\'"
+                } else {
+                    document.getElementById("venueDeleteResult").innerHTML = "No venue with that name exists (or other error)"
+                }
             }
+
+            post('/venue/delete', data, handler)
         }
 
-        post('/show/generateReportVM', data, handler)
+        function createBlock(name, password, startTime, section, startRow, endRow, price) {
+            let data = {  "venueName": name,
+                "password" : password,
+                "startTime" : startTime,
+                "section" : section,
+                "startRow" : startRow,
+                "endRow" : endRow,
+                "price" : price}
 
-    }
+            const handler = (json) => {
+                console.log(json)
+                if(json.statusCode == 200){
+                    document.getElementById("createBlockResult").innerHTML = "The following blocks have been created: \'" + json.success + "\'" //TODO
+                }
+                else{
+                    document.getElementById("createBlockResult").innerHTML = "Error: " + json.error
+                }
+            }
 
-    const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/";
+            post('/show/createBlock', data, handler)
+        }
 
-    function api(resource) {
-        return url + resource
-    }
+        function generateReportVM() {
+            let data = {
+                "name": params.get("venueName"),
+                "venueCredentials" : params.get("password"),
+            }
 
-    function post(resource, data, handler) {
-        fetch(api(resource), {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-            .then((response) => response.json())
-            .then((responseJson) => handler(responseJson))
-            .catch((err) => handler(err))
-    }
+            const handler = (json) => {
+                console.log(json)
+                if (json.statusCode == 200) {
+                    document.getElementById("showsReportVM").innerHTML = json.success
+                } else {
+                    document.getElementById("showsReportVM").innerHTML = "Error: " + json.error
+                }
+            }
 
-    async function get(resource) {
-        const response = await fetch(api(resource), {
-            method: "GET"
-        })
+            post('/show/generateReportVM', data, handler)
 
-        return response.json()
-    }
+        }
+
+        const url = "https://pailbvgk57.execute-api.us-east-2.amazonaws.com/Stage1/";
+
+        function api(resource) {
+            return url + resource
+        }
+
+        function post(resource, data, handler) {
+            fetch(api(resource), {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((responseJson) => handler(responseJson))
+                .catch((err) => handler(err))
+        }
+
+        async function get(resource) {
+            const response = await fetch(api(resource), {
+                method: "GET"
+            })
+
+            return response.json()
+        }
 
 
-    function toggleDarkMode() {
-        const body = document.body;
-        body.classList.toggle('dark-mode');
-    }
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+        }
 
-</script>
+    </script>
 
-<div class="container">
-    <h1>Venue Manager</h1>
-    <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <div class="container">
+        <h1>Venue Manager</h1>
+        <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
-    <div class=section>
-        <div class="large-text">Create Show</div>
-        show title: <input id="showTitle"/><br/>
-        start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTime"/><br/>
-        end date/time 'YYYY-MM-DD hh:mm:ss': <input id="showEndTime"/><br/>
-        uses blocks? 'Boolean 0 or 1': <input id="usesBlocks"/><br/>
-        optPrice (if not using blocks, enter universal seat price. DO NOT enter anything if using blocks): <input
-            id="optPrice"/><br/>
+        <div class=section>
+            <div class="large-text">Create Show</div>
+            show title: <input id="showTitle"/><br/>
+            start date/time 'YYYY-MM-DD hh:mm:ss': <input id="showStartTime"/><br/>
+            end date/time 'YYYY-MM-DD hh:mm:ss': <input id="showEndTime"/><br/>
+            uses blocks? 'Boolean 0 or 1': <input id="usesBlocks"/><br/>
+            optPrice (if not using blocks, enter universal seat price. DO NOT enter anything if using blocks): <input
+                id="optPrice"/><br/>
 
-        <button onclick="createShow(document.getElementById('showTitle').value,
-                        document.getElementById('showStartTime').value,
-                        document.getElementById('showEndTime').value,
-                        document.getElementById('usesBlocks').value,
-                        document.getElementById('optPrice').value
-                        )">Create Show</button>
-        <br/>
-        <p id="resultShow" readOnly></p>
+            <button onclick="createShow(document.getElementById('showTitle').value,
+                            document.getElementById('showStartTime').value,
+                            document.getElementById('showEndTime').value,
+                            document.getElementById('usesBlocks').value,
+                            document.getElementById('optPrice').value
+                            )">Create Show</button>
+            <br/>
+            <p id="resultShow" readOnly></p>
+        </div>
+
+        <div class=section>
+            <div class="large-text">List Shows</div>
+            <button onclick="listShows()">List Shows</button>
+            <p id="showsList"></p>
+        </div>
+
+        <div class=section>
+            <div class="large-text">Shows Report</div>
+            <button onclick="generateReportVM()">Venue Manager Shows Report
+            </button>
+            <p id="showsReportVM"></p>
+        </div>
+
+        <div class=section>
+            <div class="large-text">Delete Venue</div>
+            <button onclick="deleteVenue()">
+                Delete Venue
+            </button>
+            <p id="venueDeleteResult"></p>
+        </div>
     </div>
-
-    <div class=section>
-        <div class="large-text">List Shows</div>
-        <button onclick="listShows()">List Shows</button>
-        <p id="showsList"></p>
-    </div>
-
-    <div class=section>
-        <div class="large-text">Shows Report</div>
-        <button onclick="generateReportVM()">Venue Manager Shows Report
-        </button>
-        <p id="showsReportVM"></p>
-    </div>
-
-    <div class=section>
-        <div class="large-text">Delete Venue</div>
-        <button onclick="deleteVenue()">
-            Delete Venue
-        </button>
-        <p id="venueDeleteResult"></p>
-    </div>
-</div>
 </body>
 
 </html>

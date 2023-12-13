@@ -128,9 +128,7 @@
         <div class="purchase-seats-section">
             <div class="large-text">Purchase Seats</div>
             Seats 'columnrow section, ...' (ex. 1B leftSection, 2C rightSection, 4G centerSection):
-            <input id="seatsPurchaseSeats"/><br/>
-            <button onclick="purchaseSeats(document.getElementById('seatsPurchaseSeats').value)">Purchase Seats
-            </button>
+            <button onclick="purchaseSeats()">Purchase Seats</button>
             <p id="purchaseSeatsResult"></p>
         </div>
 
@@ -198,12 +196,12 @@
                                 let hasBlock = false;
                                 for(let i = 0; i < blocks.length; i++){
                                     if(seat.block == blocks[i][0]){
-                                        display += "<td style='color:" + blocks[i][1] + ";'>x</td>"
+                                        display += "<td style='background-color:" + blocks[i][1] + ";'><input type='checkbox' class='seats' value='" + seat.column + seat.row + " " + seat.section + "'></input></td>"
                                         hasBlock = true;
                                     }
                                 }
                                 if(!hasBlock){
-                                    display += "<td>x</td>"
+                                    display += "<td style='accent-color:" + blocks[i][1] + ";'><input type='checkbox' class='seats' value='" + seat.column + seat.row + " " + seat.section + "'></input></td>"
                                 }
                             }
                             else{
@@ -239,18 +237,20 @@
 
             }
 
-            function purchaseSeats(seats) {
-                let arraySeats = seats.split(", ")
+            function purchaseSeats() {
+                let arraySeats = document.getElementsByClassName("seats")
                 console.log(arraySeats)
                 let seatsForLambda = []
                 for (let element of arraySeats) {
-                    let separating = element.split(" ")
-                    let dict = {
-                        "column": separating[0][0],
-                        "row": separating[0][1],
-                        "section": separating[1], //assuming user inputs everything correctly
+                    if(element.checked){
+                        let input = element.value
+                        let dict = {
+                            "column": input.charAt(0),
+                            "row": input.charAt(1),
+                            "section": input.substring(3), //assuming user inputs everything correctly
+                        }
+                        seatsForLambda.push(dict)
                     }
-                    seatsForLambda.push(dict)
                 }
                 console.log(seatsForLambda)
 
@@ -271,7 +271,19 @@
                         }
                         document.getElementById("purchaseSeatsResult").innerHTML = seats
                     } else {
-                        document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
+                        console.log(json.invalidSeats)
+                        if(json.invalidSeats){
+                            let returnStr = "The following seats could not be purchased: <br>"
+
+                            for(let s of json.invalidSeats) {
+                                returnStr += s.column + s.row + ' ' + s.section + '<br>'
+                            }
+
+                            document.getElementById("purchaseSeatsResult").innerHTML = returnStr
+                        }
+                        else{
+                            document.getElementById("purchaseSeatsResult").innerHTML = "Error: " + json.error
+                        }
                     }
                 }
 
