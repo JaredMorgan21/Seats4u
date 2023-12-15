@@ -256,9 +256,9 @@
                 const handler = (json) => {
                     console.log(json)
                     if(json.statusCode == 200){
-                        let blocks = "<table style='width: 80%'> <tr><th>BlockID</th> <th>price</th> <th>section</th> <th>startRow</th> <th>endRow</th> <th>showID</th></tr>"
+                        let blocks = "<table style='width: 80%'> <tr><th>BlockID</th> <th>price</th> <th>section</th> <th>startRow</th> <th>endRow</th> <th>showID</th> <th>sales</th></tr>"
                         for(let b of json.success){
-                            blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID + "</td><td><button onclick='deleteBlock(&quot;" + b.section + "&quot;, &quot;" + b.startRow + "&quot;, &quot;" + b.endRow + "&quot;)'>Delete Block</button></td></tr>"
+                            blocks += "<tr> <td style='text-align: center'>" + b.blockID + "</td><td style='text-align: center'>" + b.price + "</td><td style='text-align: center'>" + b.section + "</td><td style='text-align: center'>" + b.startRow + "</td><td style='text-align: center'>" + b.endRow + "</td><td style='text-align: center'>" + b.showID + "</td><td style='text-align: center'>" + b.seatsAvailable + "/" + b.seatsTotal + "</td><td><button onclick='deleteBlock(&quot;" + b.section + "&quot;, &quot;" + b.startRow + "&quot;, &quot;" + b.endRow + "&quot;)'>Delete Block</button></td></tr>"
                         }
                         blocks += "</table>"
 
